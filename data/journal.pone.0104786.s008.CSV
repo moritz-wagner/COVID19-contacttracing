@@ -1,0 +1,97 @@
+Variable,Description,Code
+,,
+csid,Study ID ,
+,,
+diary_type ,Type of diary ,1=Picture
+,,2=Text
+,,
+,,
+diary_keeper ,Diary Keeper ,1=Self
+,,2=Shadow
+,,
+age_class_part ,Age class of participant,1= <1
+,,2= 1-5
+,,3= 6-14
+,,4= 15-19
+,,5= 20-49
+,,6= >=50
+,,
+sex ,Sex of participant ,1=Female 
+,,2=Male
+,,
+age_class_cont ,Age class of contact ,1= <1
+,,2= 1-5
+,,3= 6-14
+,,4= 15-19
+,,5= 20-49
+,,6= >=50
+,,
+day,Day of the week,0= Weekend
+,,1= Weekday
+,,
+part_educ_stat,Number of years participant has beeen to school,0= None
+,,1= 1-4
+,,2= 5-8
+,,3= 9-12
+,,4= >12
+,,9= Does not know
+,,
+part_job ,Participant's job,0= Unemployed
+,,1= Pre-student
+,,2= Student
+,,5= Casual labourer
+,,
+shadow_present ,Presence of a shadow,0= No
+,,1= Yes
+,,
+shadow_num ,Number of shadows,0= 0
+,,1= 1
+,,2= 2
+,,
+fam_rel ,Relationship to participant,
+,,1= Parent
+,,2= Sibling
+,,3= Offspring
+,,4= Spouse
+,,5= Other relative
+,,6= Other
+,,
+share_hh ,Shared household,0= No
+,,1= Yes
+,,
+same_room ,Shared sleeping room,0= No
+,,1= Yes
+,,
+share_bed ,Shared bed,0= No
+,,1= Yes
+,,
+ever_met ,Ever met the contacted person before?,0= No
+,,1= Yes
+,,
+how_often ,How often do you meet the contacted person?,
+,,
+difficulties_filling_diary ,Did you have any difficulties in filling in the diary?,0= No
+,,1= Yes
+,,
+difficulty_comments ,What difficulties did you face?,
+,,
+record_all_contacts ,Did you record all contacts?,0= No
+,,1= Yes
+,,
+record_contacts_comments ,Any comments on why not all contacts were recorded?,
+,,
+behaviour_change ,Did you experience any behavior change?,0= No
+,,1= Yes
+,,
+behaviour_change_comments ,,
+,,
+other_comments ,Any other comments?,
+,,
+loc_stat ,Residence,0= Rural
+,,1=Urban
+,,
+season,Season of the year,0= Dry
+,,1= Wet
+,,
+dok_year,Year of keeping diary,2011
+,,2012

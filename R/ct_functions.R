@@ -1,7 +1,6 @@
 ##Main functions
 
-# Commit - 'Bootstrapping function'
-##Bootstrapping contact data
+##Bootstrapping contact data---------
 contact_boot <- function(contact_data) {
   
   contact_data %>%   
@@ -21,9 +20,8 @@ contact_boot <- function(contact_data) {
   return(contact_data_boot)
 }
 
-# Commit - 'Single infection function'
 
-#New infection step from single infected id
+#New infection step from single infected id-----------
 new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
 {
   
@@ -98,9 +96,8 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
   
 }
 
-# Commit - 'Single outbreak function'
 
-##Simulate a single outbreak simulation
+##Simulate a single outbreak simulation-----------
 bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
   
   ##To track

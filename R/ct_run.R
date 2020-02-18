@@ -3,6 +3,8 @@ library(tidyverse)
 library(ggplot2)
 library(data.table)
 
+source('R/ct_functions.R')
+
 contact_data <- as.data.frame(read_csv('data/journal.pone.0104786.s007.CSV'))
 age_groups <- c('<1','1-5','6-14','15-19','20-49','>=50')
 contact_data %<>% 

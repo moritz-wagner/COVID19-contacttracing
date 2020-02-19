@@ -58,7 +58,7 @@ getDoParWorkers()
 
 ##Single sim check
 bp.inf(init_inf=1,n=10,contact_data)
-bp.inf(init_inf = 5,n=5,contact_data = contact_data,HH.herd.imm = FALSE)
+bp.inf(init_inf = 1,n=5,contact_data = contact_data,HH.herd.imm = FALSE)
 
 ##Multiple sims
 n_gen <- 5
@@ -69,7 +69,7 @@ Y <- NULL
 for (init_inf in init_inf_v) {
   tic <- Sys.time()
   X <- foreach(i=1:n_sims,.combine = 'rbind') %dopar% {
-    x <- bp.inf(init_inf = init_inf,n=n_gen ,contact_data,rep_HH=FALSE)
+    x <- bp.inf(init_inf = init_inf,n=n_gen ,contact_data,HH.herd.imm=FALSE)
     x$sim <- i
     x
   }
@@ -107,7 +107,7 @@ Y %>%
 Y %>% 
   mutate(prop_inf=infections/contacts) %>% 
   subset(gen==max(gen)) %>% 
-  gather("type","value",c(contacts,infections,prop_inf,r0_mean,r_eff)) %>% 
+  gather("type","value",c(contacts,infections,prop_inf,r0_mean,r_eff,max.HH.inf,mean.HH.inf)) %>% 
   group_by(type) %>% 
   summarise(mean(value,na.rm = TRUE))
 

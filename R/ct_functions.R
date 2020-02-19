@@ -130,8 +130,8 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
     
     for (i in 1:n) {
       
-      # X.HH <- NULL
-      # X.nHH <- NULL
+      X.HH <- NULL
+      X.nHH <- NULL
       
       if (i>1) {
         ## Get some r0 values
@@ -184,11 +184,6 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
       r0_eff[i] <- mean(c(ifelse(is.null(X.nHH),NA,mean(sapply(X.nHH,function(x) c(x$inf.contacts)))),
                           ifelse(is.null(X.HH),NA,mean(sapply(X.HH,function(x) c(x$inf.contacts))))),na.rm = TRUE)
       
-      ##Get the largest infected HH
-      max.HH.inf[i] <- max(c(unlist(sapply(X.HH,function(x) c(x$n.inf.HH))),
-                             unlist(sapply(X.nHH,function(x) c(x$n.inf.HH)))))
-      mean.HH.inf[i] <- mean(c(unlist(sapply(X.HH,function(x) c(x$n.inf.HH))),
-                               unlist(sapply(X.nHH,function(x) c(x$n.inf.HH)))))
       
       #Newly infected HH ids
       ids.HH <- c(unlist(sapply(X.HH,function(x) c(x$id.inf.HH))),
@@ -201,6 +196,11 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
       ##For each HH id, number of people infected in that HH
       n.inf.HH <- c(unlist(sapply(X.HH,function(x) c(x$n.inf.HH))),
                     unlist(sapply(X.nHH,function(x) c(x$n.inf.HH))))
+      
+      ##Get the largest infected HH
+      max.HH.inf[i] <- if (is.null(n.inf.HH)) 0 else max(n.inf.HH)
+      mean.HH.inf[i] <- if (is.null(n.inf.HH)) 0 else mean(n.inf.HH)
+      
       
       if (length(c(ids.nHH,ids.HH))<1) break
       
@@ -216,3 +216,7 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
                     mean.HH.inf)) ##Track "avoided" HH infections as well?
   
 }
+
+
+
+##

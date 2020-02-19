@@ -22,8 +22,7 @@ contact_boot <- function(contact_data) {
 
 
 #New infection step from single infected id-----------
-new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
-{
+new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1,HH.herd.imm=FALSE) {
   
   id_new_inf_nHH <- NULL
   id_new_inf_HH <- NULL
@@ -31,8 +30,11 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
   
   if (!all(id%in%contact_data$csid)) stop('id is not in contact data')
   
-  if (!HH) n.inf.HH <- 1
-  if (HH && n.inf.HH<1) n.inf.HH <- 1
+  if (!HH) {
+    n.inf.HH <- 1
+    HH.herd.imm <- FALSE
+  }
+  if (HH & n.inf.HH<1) n.inf.HH <- 1
   
   ##Get all the contacts of id
   inds.contacted <- contact_data[csid==id,]
@@ -45,8 +47,10 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
   if (HH) {
     c.new <- nrow(inds.contacted[share_hh=="non-HH"])
     #Sample the HH memebers already infected
-    contact.id.inf <- sample(inds.contacted[share_hh=="HH",contact_id],
-                             size = min(n.inf.HH,nrow(inds.contacted[share_hh=="HH"])))   #Can skip things when all HH members are already infected...
+    if (HH.herd.imm) {
+      contact.id.inf <- sample(inds.contacted[share_hh=="HH",contact_id],
+                               size = min(n.inf.HH,nrow(inds.contacted[share_hh=="HH"])))   #Can skip things when all HH members are already infected...
+    }
   }  
   
   c_inf <- data.table()
@@ -56,7 +60,9 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
     #Which of these contacts become infected
     c_inf <- inds.contacted[sample(1:c,size = min(r0,c))] ###Is this an issue mathematically (skews R0)????
     #Remove already infected (for herd immunity??)
-    c_inf <- c_inf[!(contact_id%in%contact.id.inf)]   ## may be a problem if same id sampled twice... fix!
+    if (HH.herd.imm) {
+      c_inf <- c_inf[!(contact_id%in%contact.id.inf)]   ## may be a problem if same id sampled twice... fix!
+    }
     
     #Get age groups of non-HH infections
     c_inf_ages_nHH <- c_inf[share_hh=='non-HH',.(age_class_cont)]
@@ -90,7 +96,9 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
               inf.contacts=length(c(id_new_inf_nHH,id_new_inf_HH)),
               id.inf.HH=id_new_inf_HH,
               id.inf.nHH=id_new_inf_nHH,
-              n.inf.HH=rep(n.inf.HH,length(id_new_inf_HH))+length(id_new_inf_HH)
+              n.inf.HH=if (length(id_new_inf_HH)>0) {
+                rep(n.inf.HH,times=length(id_new_inf_HH))+length(id_new_inf_HH)
+                } else NULL
   )
   )
   
@@ -98,12 +106,14 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1)
 
 
 ##Simulate a single outbreak simulation-----------
-bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
+bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
   
   ##To track
   total.contacts <- rep(NA,n)
   total.new.contacts <- rep(NA,n)
   inf.contacts <- rep(NA,n)
+  max.HH.inf <- rep(NA,n)
+  mean.HH.inf <- rep(NA,n)
   r0s <- rep(NA,n)
   r0_eff <- rep(NA,n)
   n.inf.HH <- 0
@@ -120,8 +130,8 @@ bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
     
     for (i in 1:n) {
       
-      X.HH <- NULL
-      X.nHH <- NULL
+      # X.HH <- NULL
+      # X.nHH <- NULL
       
       if (i>1) {
         ## Get some r0 values
@@ -143,6 +153,7 @@ bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
       
       if (all(c(r0.nHH,r0.HH)==0)) break
       
+      
       ##Only need to simulate ids with R0>0
       ids.nHH <- ids.nHH[r0.nHH>0]
       ids.HH <- ids.HH[r0.HH>0]
@@ -153,7 +164,7 @@ bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
       ##Infection step for HH contacts
       if (length(ids.HH) > 0) {
         X.HH <- foreach(i=1:length(ids.HH)) %dopar% {
-          new.inf(id = ids.HH[i],contact_data = CD,r0 = r0.HH[i],HH = TRUE,n.inf.HH = n.inf.HH[i])
+          new.inf(id = ids.HH[i],contact_data = CD,r0 = r0.HH[i],HH = TRUE,n.inf.HH = n.inf.HH[i],HH.herd.imm=HH.herd.imm)
         }
       }
       
@@ -172,6 +183,12 @@ bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
       ##Check this, not quite right, maybe put it inside the new infection step!!!!
       r0_eff[i] <- mean(c(ifelse(is.null(X.nHH),NA,mean(sapply(X.nHH,function(x) c(x$inf.contacts)))),
                           ifelse(is.null(X.HH),NA,mean(sapply(X.HH,function(x) c(x$inf.contacts))))),na.rm = TRUE)
+      
+      ##Get the largest infected HH
+      max.HH.inf[i] <- max(c(unlist(sapply(X.HH,function(x) c(x$n.inf.HH))),
+                             unlist(sapply(X.nHH,function(x) c(x$n.inf.HH)))))
+      mean.HH.inf[i] <- mean(c(unlist(sapply(X.HH,function(x) c(x$n.inf.HH))),
+                               unlist(sapply(X.nHH,function(x) c(x$n.inf.HH)))))
       
       #Newly infected HH ids
       ids.HH <- c(unlist(sapply(X.HH,function(x) c(x$id.inf.HH))),
@@ -194,6 +211,8 @@ bp.inf <- function(init_inf=1,n=10,contact_data,rep_HH=TRUE) {
                     new.contacts=total.new.contacts,
                     infections=inf.contacts,
                     r0_mean=r0s,
-                    r_eff=r0_eff)) ##Track "avoided" HH infections as well?
+                    r_eff=r0_eff,
+                    max.HH.inf,
+                    mean.HH.inf)) ##Track "avoided" HH infections as well?
   
 }

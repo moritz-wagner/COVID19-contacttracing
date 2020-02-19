@@ -48,7 +48,7 @@ ggplot()+
 ##New Infection check
 id <- sample(contact_data$csid,1)
 cd <- contact_boot(contact_data)
-new.inf(sample(contact_data$csid,1),cd,r0 = 30,HH = TRUE,n.inf.HH=3)
+new.inf(sample(contact_data$csid,1),cd,r0 = 10,HH = TRUE,n.inf.HH=3,HH.herd.imm = FALSE)
 
 library(doParallel)
 pkgs <- c('doParallel', 'foreach')
@@ -58,7 +58,7 @@ getDoParWorkers()
 
 ##Single sim check
 bp.inf(init_inf=1,n=10,contact_data)
-bp.inf(init_inf = 5,n=5,contact_data,rep_HH=FALSE)
+bp.inf(init_inf = 5,n=5,contact_data = contact_data,HH.herd.imm = FALSE)
 
 ##Multiple sims
 n_gen <- 5

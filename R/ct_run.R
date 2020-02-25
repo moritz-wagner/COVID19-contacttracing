@@ -62,7 +62,7 @@ bp.inf(init_inf = 1,n=5,contact_data = contact_data,HH.herd.imm = FALSE)
 
 ##Multiple sims
 n_gen <- 5
-n_sims <- 10
+n_sims <- 100
 # init_inf_v <- c(1,3,5,10)
 init_inf_v <- 5
 Y <- NULL
@@ -148,3 +148,69 @@ Y %>%
   summarise(value=mean(value,na.rm = TRUE)) %>%
   ggplot(aes(x=gen,y=value,color=R))+
   geom_line()+facet_wrap(init_inf~.)
+
+
+Y %>% 
+  select(max.HH.inf,mean.HH.inf) %>% 
+  ggplot(aes(alpha=.2))+
+  geom_histogram(aes(max.HH.inf),fill="red")+
+  geom_histogram(aes(mean.HH.inf),fill="green")+
+  theme(legend.position = "none")+ggtitle("Max and mean number of infecteds in a HH\nafter 5 generations")
+
+
+
+###counting contacts
+contact_data$ever_met %>% summary() %>% barplot()
+contact_data$how_often %>% summary() %>% barplot()
+contact_data$how_often <- factor(contact_data$how_often,levels = unique(contact_data$how_often)[c(3,2,4,5,1)])
+as.data.table(contact_data)[,.N,by=c('ever_met','how_often')] %>% 
+  ggplot(aes(how_often,N,fill=ever_met))+geom_bar(stat="identity")
+as.data.table(contact_data)[,.N,by=c('ever_met','how_often')][,prop:=N/sum(N),by=how_often] %>% 
+  ggplot(aes(how_often,prop,fill=ever_met))+geom_bar(stat="identity")
+
+C <- NULL
+for (i in 1:50) {
+  cd <- contact_boot(contact_data)
+  id <- sample(cd$csid,1)
+  t <- 10
+  Ci <- count.contacts(id,cd,t)
+  Ci$run <- i
+  C <- rbind(C,Ci)
+}
+
+C %>% 
+  group_by(how_often,ever_met,run) %>% 
+  summarise(weight=sum(weight,na.rm = TRUE)) %>% 
+  ggplot(aes(x=how_often,y=weight,fill=ever_met,group=factor(run)))+
+  geom_bar(stat="identity",position = "dodge")
+
+n <- 500
+
+X <- foreach(t = 1:14,.combine = 'rbind') %dopar% {
+  X <- times(n) %dopar% {
+    cd <- contact_boot(contact_data)
+    id <- sample(cd$csid,1)
+    Ci <- count.contacts(id,cd,t)
+    nrow(Ci)
+  }
+  X <- data.frame(contacts=X,days=t)
+  X
+}
+
+# n <- 100
+# Y <- NULL
+# for (t in 1:14) {
+#   for (i in 1:n) {
+#     cd <- contact_boot(contact_data)
+#     id <- sample(cd$csid,1)
+#     Ci <- count.contacts(id,cd,t) 
+#     Y <- rbind(Y,data.frame(contacts=nrow(Ci),days=t))
+#   }
+# }
+
+X %>% 
+  ggplot(aes(x=factor(days),y=contacts))+geom_boxplot()+
+  ggtitle("Number of new contacts in 14 days (500 sims)")+
+  xlab('days')+ylab("Unique contacts")
+
+

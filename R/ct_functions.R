@@ -4,7 +4,7 @@
 contact_boot <- function(contact_data) {
   
   contact_data %>%   
-    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh) -> contact_data_simple
+    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
   
   # contact_data_simple %>% head
   contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
@@ -17,6 +17,18 @@ contact_boot <- function(contact_data) {
   contact_data_boot <- contact_data_simple[,-c("csid")][contact.sample, on = 'contact_id']
   contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
   
+  ##Do some fixing of missing/inconsistent data
+  #Fix missing howoften that are in HH to daily
+  contact_data_boot[share_hh=="HH" & how_often=='Missing',how_often := 'Daily']
+  ##Fix how_often missing and evermet==no to never
+  contact_data_boot[ever_met=="No" & how_often=='Missing',how_often := 'Never']
+  #Fix missing how_often and ever_met==Missing to sample based on rest of data 
+  missing.contacts <- contact_data_boot[how_often=='Missing']
+  
+  # missing.contacts[.(how_often=sample(contact_data_boot[,how_often]))]
+  # merge(missing.contacts,contact_data_boot[how_often!='Missing'],
+  #       by=c("age_class_part","age_class_cont","loc_stat","share_hh"))
+  # 
   return(contact_data_boot)
 }
 
@@ -98,7 +110,7 @@ new.inf <- function(id,contact_data,r0=2,HH=FALSE,n.inf.HH=1,HH.herd.imm=FALSE) 
               id.inf.nHH=id_new_inf_nHH,
               n.inf.HH=if (length(id_new_inf_HH)>0) {
                 rep(n.inf.HH,times=length(id_new_inf_HH))+length(id_new_inf_HH)
-                } else NULL
+              } else NULL
   )
   )
   
@@ -218,5 +230,52 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
 }
 
 
+##Count number of contacts for a given period weighting by "how_often" and "ever_met" measure
+##output: list of contacts and a weight for becoming infected across time t
+count.contacts <- function(id,CD,t=10) {
+  
+  # CD <- contact_boot(contact_data)
+  
+  CD[how_often=='Missing' & ever_met=="Missing"]   ##What to do with these???
+  CD[how_often=='Missing' & ever_met=="Yes"]      #And these?   
+  CD[ever_met=="No"]      #And these?   
+  
+  weights <- c(1,1.5/7,1.5/30,.5/30,0)
+  weights.conditions <- c("Daily","Often","Regularly","Rarely","Never")
+  # id <- sample(CD$csid,1)
+  id.contacts <- CD[csid==id]
+  # x <- id.contacts[how_often==weights.conditions[1],weight := weights[1]]
+  new.id.contacts <- id.contacts
+  ##Add weights.... Doesnt include Missing, what to do???
+  id.contacts <- rbindlist(lapply(1:length(weights),function(i) id.contacts[how_often==weights.conditions[i]][,weight := weights[i]]))
+  id.contacts[order(ever_met,how_often)] %>% head
+  
+  
+  if (nrow(id.contacts)!=0) {
+    
+  ##Given a contact with certain weight, how many new such contacts will be made in t days (with some randomness)
+  id.contacts$new.count <-  sapply(id.contacts$weight,function(p) sum(runif(t) <= (1-p)^c(1:t-1)))
+  
+  ##Extend by new contacts and give them new ids
+  new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count)),by=c(colnames(id.contacts)[1:9])][,-"new.contact_id"]
+  new.id.contacts$contact_id <- 1:nrow(new.id.contacts)  
+  # new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count))]
+  # new.id.contacts
 
-##
+  
+  # new.id.contacts <- id.contacts[how_often%in%c("Missing","Rarely") & ever_met=="No",contact_id]
+  # new.id.contacts <- sample(new.id.contacts,(t-1)*length(new.id.contacts),replace = TRUE)
+  # if (length(new.id.contacts)>0) {
+  #   new.id.contacts <- id.contacts[match(new.id.contacts,contact_id)][,weight:=1]
+  #   id.contacts <- rbind(id.contacts,new.id.contacts)
+  #   id.contacts$contact_id <- seq(1,length.out = nrow(id.contacts))
+  # }
+  # id.contacts[,weight := weight*t/sum(weight*t,na.rm = TRUE)]
+  }
+  
+  return(new.id.contacts)
+  
+}
+
+
+

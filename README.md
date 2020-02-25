@@ -9,14 +9,13 @@
 ## Methods 
 ### Contacts (Moritz)
 
-*Sampling from the contact data*
-
+#### Sampling from the contact data
 For each outbreak simulation a bootstrapped dataset of the original contact data is created. First a set of participants is resampled, then for each of those a set of their contacts are resampled. In this step we also deal with some of the missing data:
 * share_HH==TRUE & how_often=="Missing" -> how_often=="Daily"
 * how_often=="Missing" & ever_met=="No" -> how_often=="Never"
 * how_often=="Missing" that are left are sampled from the rest of the data based on age of participant and contact
 
-*Repeated vs unique contacts in a given time period*
+#### Repeated vs unique contacts in a given time period
 We have information on the frequency of a contact and the survey definitions of these, so we can assign a probability of meeting that contact on a given day:
 * Daily -> 1
 * Often 1-2 times per week -> (1.5/7)
@@ -33,11 +32,11 @@ Using these probabilities we can work out how many contacts are repeated on a gi
 -We keep track of HH infecteds to limit the susceptible pool of future infections
 
 
-### Infection and isolation times (Ivy):
+### Infection and isolation times (Ivy)
 -Extending the LSHTM model to include contact data and the depletion of contacts due to HH clusters
 -If for each infected we know who they contact, we can assign who becomes infected and who is successfully isolated based on sampling from probability distributions of R0, incubation periods, serial intervals, proportion of asymptomatic transmission, delay to and probability of isolation.
 
-## Challenges
+### Challenges
 -Repeated contacts: Currently assuming that the contacts of a single day are repeated every day for a given time period. Is this assumption valid? Then using probabilities based on the recorded frequency of the contacts, the number of contacts that are new on a given day are calculated, e.g. Daily contacts will not be repeated, while regular contacts have a given probability of being repeated vs being new every day. (see figure)
 
 -Weighting by frequency of contacts: Daily contacts have a higher probability of becoming infected than regular ones. Reasonable?

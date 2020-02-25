@@ -1,14 +1,16 @@
 # Impact of and effort involved in contact tracing cases using contact data
 
 ## Questions
--IMPACT: How effective is contact tracing, i.e.measured by reduction in Reff
+* IMPACT: How effective is contact tracing, i.e.measured by reduction in Reff
 	-What would make it more effective, i.e. delay to isolation, self isolation (of non symptomatic HH contacts), proportion of pre/asymptomatic transmission
 -EFFORT: How many contacts need to be traced given n infecteds
 -At what point does it become unfeasible in terms of impact and/or effort
 
-## Methods
-### Contacts (Moritz)
+## Methods 
+### Contacts (Moritz)
+
 *Sampling from the contact data*
+
 For each outbreak simulation a bootstrapped dataset of the original contact data is created. First a set of participants is resampled, then for each of those a set of their contacts are resampled. In this step we also deal with some of the missing data:
 * share_HH==TRUE & how_often=="Missing" -> how_often=="Daily"
 * how_often=="Missing" & ever_met=="No" -> how_often=="Never"

@@ -17,7 +17,7 @@ For each outbreak simulation a bootstrapped dataset of the original contact data
 
 #### Repeated vs unique contacts in a given time period
 We have information on the frequency of a contact and the survey definitions of these, so we can assign a probability p of meeting that contact on a given day:
-* Daily -> p=1
+* Daily -> $p=1$
 * Often 1-2 times per week -> p=(1.5/7)
 * Regular 1-2 times per month -> p=(1.5/30)
 * Rarely <1 times per month -> p=(0.5/30)

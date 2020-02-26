@@ -19,6 +19,7 @@ contact_data$age_class_cont <- factor(contact_data$age_class_cont,levels = sort(
 levels(contact_data$age_class_cont) <- age_groups
 levels(contact_data$age_class_part) <- age_groups
 contact_data$csid <- as.integer(as.character(contact_data$csid))
+contact_data$how_often <- factor(contact_data$how_often,levels = unique(contact_data$how_often)[c(3,2,4,5,1)])
 
 ##Compare bootstrap to original data
 #Hist of contacts
@@ -184,9 +185,9 @@ C %>%
   ggplot(aes(x=how_often,y=weight,fill=ever_met,group=factor(run)))+
   geom_bar(stat="identity",position = "dodge")
 
-n <- 500
-
-X <- foreach(t = 1:14,.combine = 'rbind') %dopar% {
+n <- 1000
+tic <- Sys.time()
+X <- foreach(t = 14,.combine = 'rbind') %dopar% {
   X <- times(n) %dopar% {
     cd <- contact_boot(contact_data)
     id <- sample(cd$csid,1)
@@ -196,21 +197,50 @@ X <- foreach(t = 1:14,.combine = 'rbind') %dopar% {
   X <- data.frame(contacts=X,days=t)
   X
 }
+toc <- Sys.time()
+toc-tic
 
-# n <- 100
-# Y <- NULL
-# for (t in 1:14) {
-#   for (i in 1:n) {
-#     cd <- contact_boot(contact_data)
-#     id <- sample(cd$csid,1)
-#     Ci <- count.contacts(id,cd,t) 
-#     Y <- rbind(Y,data.frame(contacts=nrow(Ci),days=t))
-#   }
-# }
-
+medians <- X %>% group_by(days) %>% summarise(median=median(contacts))
+means <- X %>% group_by(days) %>% summarise(mean=mean(contacts))
 X %>% 
-  ggplot(aes(x=factor(days),y=contacts))+geom_boxplot()+
-  ggtitle("Number of new contacts in 14 days (500 sims)")+
-  xlab('days')+ylab("Unique contacts")
+  ggplot(aes(x=factor(days)))+
+  geom_boxplot(aes(y=contacts))+
+  geom_hline(yintercept=c(25,50,100),color="red",linetype=2,alpha=.5)+
+  ggtitle("Number of new contacts in 14 days (1000 sims)")+
+  xlab('days')+ylab("Unique contacts")+
+  geom_text(data = medians,aes(y=median,label=median),vjust=-.4)
+
+X$class <- cut(X$contacts,c(0,1,seq(10,100,by = 10),Inf))
+X %>% subset(days==14) %>% 
+  group_by(class) %>% 
+  tally() %>% mutate(frequency=n/sum(n)) %>% 
+  ggplot(aes(x=class,y=frequency))+geom_bar(stat="identity")+xlab("Number of contacts")+
+  ggtitle("Frequency of unique contacts in 14 days")+ylim(0,.5)
+
+
+n <- 1000
+t <- 14
+tic <- Sys.time()
+X <- foreach(1:n,.combine = 'rbind') %dopar% {
+  cd <- contact_boot(contact_data)
+  id <- sample(cd$csid,1)
+  Ci <- count.contacts(id,cd,t)
+  Ci %>% group_by(how_often) %>% tally
+}
+X
+toc <- Sys.time()
+toc-tic
+
+
+X$class <- cut(X$n,c(0,1,seq(10,100,by = 10),Inf))
+X %>% 
+  group_by(class,how_often) %>% 
+  tally() %>% 
+  group_by(how_often) %>% 
+  mutate(frequency=n/sum(n)) %>% 
+  ggplot(aes(x=class,y=frequency,fill=how_often))+
+  geom_bar(stat="identity",position = "dodge")+
+  xlab("Number of contacts")+
+  ggtitle("Frequency of unique contacts in 14 days")
 
 

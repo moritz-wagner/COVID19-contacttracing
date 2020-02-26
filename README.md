@@ -16,16 +16,14 @@ For each outbreak simulation a bootstrapped dataset of the original contact data
 * how_often=="Missing" that are left are sampled from the rest of the data based on age of participant and contact
 
 #### Repeated vs unique contacts in a given time period
-We have information on the frequency of a contact and the survey definitions of these, so we can assign a probability of meeting that contact on a given day:
-* Daily -> 1
-* Often 1-2 times per week -> (1.5/7)
-* Regular 1-2 times per month -> (1.5/30)
-* Rarely <1 times per month -> (.5/30)
-* Never -> 0
+We have information on the frequency of a contact and the survey definitions of these, so we can assign a probability p of meeting that contact on a given day:
+* Daily -> p=1
+* Often 1-2 times per week -> p=(1.5/7)
+* Regular 1-2 times per month -> p=(1.5/30)
+* Rarely <1 times per month -> p=(0.5/30)
+* Never -> p=0
 
-Using these probabilities we can work out how many contacts are repeated on a given day using the following formula:
-
-
+We assume that, given a participant, the contacts for a single day are representative of any other day. So if we have a single contact of a certain frequency on day one, this contact is repeated for the remaining t-1 days. Then based on the frequencies above, this contact has probability p of being repeated. So for each day 1-p gives the probability that a contact is a new contact. If a new contact occurs, the probability of a further new contact on the following days is (1-p)^2, and so on. Random numbers between 0 and 1 are drawn each day to determine whether new contacts have occured. We also keep track of how often a contact is repeated in order to give an estimate for the contact intensity and thus the risk of transmission over a given period.
 
 
 -For a given time period and a single infected we resample from the contact data to produce the number of unique new HH and non-HH contacts

@@ -229,19 +229,11 @@ bp.inf <- function(init_inf=1,n=10,contact_data,HH.herd.imm=TRUE) {
   
 }
 
-##Given a contact with certain weight, how many new such contacts will be made in t days (with some randomness)
+##Given a single contact with probability p of being repeated each dat (based on frequency)
+# how many new such contacts will be made in t days (with some randomness)
 new.contacts <- function(t,p) {
-  # t <- 14
   n.c <- 1
-  # P <- as.matrix((1-p)^(1:t-1))
-  # ###FIs this it?
-  # for (i in 2:t) {
-  #   new.c <- sum(runif(n.c) <= P[i,])
-  #   P <- cbind(P,matrix(rep(shift(P[,1],i-1),new.c),nrow=t))
-  #   n.c <- n.c+new.c
-  # }
   P <- 1-p
-  ###Is this it?
   for (i in 2:t) {
     if (runif(1) <= P) {
       P <- P*(1-p)
@@ -256,53 +248,33 @@ new.contacts <- function(t,p) {
 ##output: list of contacts and a weight for becoming infected across time t
 count.contacts <- function(id,CD,t=10) {
   
-  CD <- contact_boot(contact_data)
+  # CD <- contact_boot(contact_data)
   
   CD[how_often=='Missing' & ever_met=="Missing"]   ##What to do with these???
   CD[how_often=='Missing' & ever_met=="Yes"]      #And these?   
-  CD[ever_met=="No"]      #And these?   
+  # CD[ever_met=="No"]      #And these?   Fixed to Never
   
-  weights <- c(1,1.5/7,1.5/30,.5/30,0)
-  weights.conditions <- c("Daily","Often","Regularly","Rarely","Never")
-  id <- sample(CD$csid,1)
+  ## Add weights to count how many contacts are repeated during t
+  weights <- c(1,0,1.5/7,1.5/30,.5/30,0)
+  CD$weights <- weights[as.numeric(CD$how_often)]
+
   id.contacts <- CD[csid==id]
-  # x <- id.contacts[how_often==weights.conditions[1],weight := weights[1]]
   new.id.contacts <- id.contacts
-  ##Add weights.... Doesnt include Missing, what to do???
-  id.contacts <- rbindlist(lapply(1:length(weights),function(i) id.contacts[how_often==weights.conditions[i]][,weight := weights[i]]))
-  id.contacts[order(ever_met,how_often)] %>% head
-  
   
   if (nrow(id.contacts)!=0) {
     
-    
-    ##Figure out a matrix solution??
-    
-    ##Previous method (wrong)
-    # id.contacts$new.count <-  sapply(id.contacts$weight,function(p) sum(runif(t) <= (1-p)^c(1:t-1)))
-    
-    id.contacts[,new.count := new.contacts(t,weight),by=contact_id]
+    ## Count how many new contacts of each type were made during t days
+    id.contacts <- id.contacts[,':='(new.count = new.contacts(t,weights)),by=contact_id]
     
     ##Extend by new contacts and give them new ids
     new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count)),by=c(colnames(id.contacts)[1:9])][,-"new.contact_id"]
     new.id.contacts$contact_id <- 1:nrow(new.id.contacts)  
-    # new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count))]
-    # new.id.contacts
-    
-    
-    # new.id.contacts <- id.contacts[how_often%in%c("Missing","Rarely") & ever_met=="No",contact_id]
-    # new.id.contacts <- sample(new.id.contacts,(t-1)*length(new.id.contacts),replace = TRUE)
-    # if (length(new.id.contacts)>0) {
-    #   new.id.contacts <- id.contacts[match(new.id.contacts,contact_id)][,weight:=1]
-    #   id.contacts <- rbind(id.contacts,new.id.contacts)
-    #   id.contacts$contact_id <- seq(1,length.out = nrow(id.contacts))
-    # }
-    # id.contacts[,weight := weight*t/sum(weight*t,na.rm = TRUE)]
+  
   }
   
-  return(new.id.contacts)
+  #Add final weights for how often each contact was made during t
+  t.weights <- c(1,1/t,1.5/7,1.5/30,.5/30,1/t)*t
+  new.id.contacts$weights <- t.weights[as.numeric(new.id.contacts$how_often)]
   
+  return(new.id.contacts)
 }
-
-
-

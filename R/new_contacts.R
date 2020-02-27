@@ -28,3 +28,6 @@ t <- 14
 cd <- contact_boot(contact_data)
 id <- sample(cd$csid,1)
 count.contacts(id,cd,t)
+
+
+

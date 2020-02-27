@@ -25,6 +25,12 @@ contact_boot <- function(contact_data) {
   #Fix missing how_often and ever_met==Missing to sample based on rest of data 
   missing.contacts <- contact_data_boot[how_often=='Missing']
   
+  contact_data_boot[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts),
+                                                                function(i) sample(contact_data_boot[how_often!='Missing'][
+                                                                  missing.contacts[i],how_often,
+                                                                  on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
+  
+  
   # missing.contacts[.(how_often=sample(contact_data_boot[,how_often]))]
   # merge(missing.contacts,contact_data_boot[how_often!='Missing'],
   #       by=c("age_class_part","age_class_cont","loc_stat","share_hh"))
@@ -257,7 +263,7 @@ count.contacts <- function(id,CD,t=10) {
   ## Add weights to count how many contacts are repeated during t
   weights <- c(1,0,1.5/7,1.5/30,.5/30,0)
   CD$weights <- weights[as.numeric(CD$how_often)]
-
+  
   id.contacts <- CD[csid==id]
   new.id.contacts <- id.contacts
   
@@ -269,7 +275,7 @@ count.contacts <- function(id,CD,t=10) {
     ##Extend by new contacts and give them new ids
     new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count)),by=c(colnames(id.contacts)[1:9])][,-"new.contact_id"]
     new.id.contacts$contact_id <- 1:nrow(new.id.contacts)  
-  
+    
   }
   
   #Add final weights for how often each contact was made during t

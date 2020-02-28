@@ -35,8 +35,15 @@ We assume that, given a participant, the contacts for a single day are represent
 -If for each infected we know who they contact, we can assign who becomes infected and who is successfully isolated based on sampling from probability distributions of R0, incubation periods, serial intervals, proportion of asymptomatic transmission, delay to and probability of isolation.
 
 ### Challenges
--Repeated contacts: Currently assuming that the contacts of a single day are repeated every day for a given time period. Is this assumption valid? Then using probabilities based on the recorded frequency of the contacts, the number of contacts that are new on a given day are calculated, e.g. Daily contacts will not be repeated, while regular contacts have a given probability of being repeated vs being new every day. (see figure)
+-Repeated contacts: Currently assuming that the contacts of a single day are repeated every day for a given time period. Is this assumption valid?
 
 -Weighting by frequency of contacts: Daily contacts have a higher probability of becoming infected than regular ones. Reasonable?
 
 -Single generation step vs full outbreak: If we want to model a full outbreak, we have to keep track of who is in which HH. This is difficult and messy, as we don’t have HH ids. We have thought of ways around it, but it requires a number of assumptions. An alternative would be to model a single generation only, i.e. one infection step, and look at how effective isolation is in that scenario. It would give a lower bound to the impact of isolation, as any secondary transmissions are ignored.
+
+-Currently drawing times when infection occurs. Should we limit contacts to that duration or consider contacts over a whole 2 week period. Weighting of contacts by frequency probably takes care of this to some extent. Issue: Which contacts to count for effort of tracing?
+
+-Keep track of HH contacts only or the full network, open vs closed population
+
+-Higher R0 for HH contacts? [Outside Hubei 70-80% of infections were within HH clusters](https://panopto.lshtm.ac.uk/Panopto/Pages/Viewer.aspx?id=83ba0783-b1ce-4053-aaa5-ab6600da76d8), although might be a by-product of social distancing? -> weighting might take care of this, as daily contacts are most likely to be HH contacts?
+

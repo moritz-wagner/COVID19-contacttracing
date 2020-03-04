@@ -1,4 +1,19 @@
-# Impact of and effort involved in contact tracing cases using contact data
+# Quantifying the impact of and effort involved in contact tracing cases using contact data for Kenya
+
+## Introduction
+
+Multiple international cases of the novel coronavirus disease (COVID-19) have been observed outside of China since the start of the epidemic. Whilst the majority of these are exported cases with a direct link to the epidemic in China, some countries are seeing cases of sustained onwards transmissions. Outbreaks in other countries of the magnitude observed in China would pose a significant strain on public health resources, in particular in resource poor settings across Africa. To limit this, early detection and prevention of cases at the start of an outbreak is crucial.
+
+Contact tracing forms one such prevention measure, where close contacts of an infected case are traced. The effectiveness of this depends heavily on the natural history of infection, in particular the proportion of pre- and asymptomatic transmission occurring, as has been [shown recently](https://www.thelancet.com/journals/langlo/article/PIIS2214-109X(20)30074-7/fulltext).
+A further limitation is the amount of resources involved in tracing close contacts . Thus, informed decisions must be made of when and how to best implement contact tracing becomes particularly important.
+
+This study makes use of diary-based contact data and includes it into a [previously developed model](https://www.thelancet.com/journals/langlo/article/PIIS2214-109X(20)30074-7/fulltext) of contact tracing. As such contact data typically represent contacts from a single day only, we resample contacts of each participant based on their recorded frequency to create a synthetic set of contacts across multiple days. The participants and their contacts then form our study population into which we introduce initial infected cases and then simulate the early stages of an outbreak. Using this model we explore the effectiveness of different strategies for contact tracing under different transmission scenarios. Additionally, we incorporate several other factors included in the contact data such as age, location (urban, rural), household membership, and frequency of contact.
+There are several advantages of including contact data as these allow us to: 
+1)	Create a more realistic model, e.g. allowing for household infection clusters
+2)	Measure the effort involved in contact tracing, e.g. how many contacts need to be traced per infection at a given time of the outbreak
+3)	Include targeted interventions, e.g. isolating household members only
+As cases of COVID-19 rise internationally, we hope that this work can inform the Kenyan government and other African nations on how they may be able to effectively implement contact tracing strategies and at which point resources should be focused on other intervention strategies.
+
 
 ## Questions
 * IMPACT: How effective is contact tracing, i.e.measured by reduction in Reff
@@ -64,9 +79,10 @@ For the quarantine scenarios, we distinguish between HH and nHH contacts and set
 * Number of contacts that need to be traced
 * R effective
 * Number of outbreaks that are controlled: [LSHTM](https://www.medrxiv.org/content/10.1101/2020.02.08.20021162v1.full.pdf) define this as outbreaks where transmission ended within 12 weeks or before 5000 cases in total. Perhaps a similar measure that also takes into account the amount of contacts that require tracing?
+* How many contacts need to be traced to succesfully control an outbreak?
 
 
-## Challenges
+## Challenges/Extras
 -Repeated contacts: Currently assuming that the contacts of a single day are repeated every day for a given time period. Is this assumption valid?
 
 -Weighting by frequency of contacts: Daily contacts have a higher probability of becoming infected than regular ones. Reasonable?
@@ -75,10 +91,13 @@ For the quarantine scenarios, we distinguish between HH and nHH contacts and set
 
 -Higher R0 for HH contacts? [Outside Hubei 70-80% of infections were within HH clusters](https://panopto.lshtm.ac.uk/Panopto/Pages/Viewer.aspx?id=83ba0783-b1ce-4053-aaa5-ab6600da76d8), although might be a by-product of social distancing? -> weighting might take care of this, as daily contacts are most likely to be HH contacts?
 
+-
+
 
 ## Assumptions
 * The types of contacts of a single day are representative of any other day and repeated
 * The average frequency of a contact for a given period determines the weighting of infection, i.e. more frequent contacts are more likely to become infected
+* Contacts over a two week period determine who gets traced and can get infected. Even if contacts become infected in a shorter period. Weighting of more frequent contacts, however, will take care of some potential infection biases. Likely to overestimte 
 * Quarantine scenario assumes no delay to isolation, i.e. the time to find contacts is not considered
 
 

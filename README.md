@@ -12,6 +12,7 @@ There are several advantages of including contact data as these allow us to:
 1)	Create a more realistic model, e.g. allowing for household infection clusters
 2)	Measure the effort involved in contact tracing, e.g. how many contacts need to be traced per infection at a given time of the outbreak
 3)	Include targeted interventions, e.g. isolating household members only
+
 As cases of COVID-19 rise internationally, we hope that this work can inform the Kenyan government and other African nations on how they may be able to effectively implement contact tracing strategies and at which point resources should be focused on other intervention strategies.
 
 

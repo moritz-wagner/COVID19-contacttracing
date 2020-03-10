@@ -8,13 +8,6 @@ Contact tracing forms one such prevention measure, where close contacts of an in
 
 This study extends a [previously developed model](https://www.thelancet.com/journals/langlo/article/PIIS2214-109X(20)30074-7/fulltext) of contact tracing to include the use of [diary-based contact data](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104786) to form a more realistic, context-specific picture of the effect of contact tracing. We have information on age-grouped contacts in a single day and the usual frequency of each contact for over 500 study participants in rural and urban settings. We resample contacts of each participant based on their recorded frequency to create a synthetic set of contacts across multiple days. The participants and their contacts then form our study population into which we introduce initial infected cases and then simulate the early stages of an outbreak. Using this model we explore the effectiveness of different strategies for contact tracing, including the isolation of household contacts, under different transmission scenarios. This study aims to inform the ministry of health on how they may be able to effectively implement contact tracing strategies and at which point resources should be focused on other intervention strategies.
 
-
-## Questions
-* IMPACT: How effective is contact tracing, i.e.measured by reduction in Reff
-	* What would make it more effective, i.e. delay to isolation, self isolation (of non symptomatic HH contacts), proportion of pre/asymptomatic transmission
-* EFFORT: How many contacts need to be traced
-* At what point does it become unfeasible in terms of impact and/or effort
-
 ## Methods 
 
 ### Contacts

@@ -16,7 +16,7 @@ mean.inc <- mean(inc.period)
 #Serial intervals based on incubation samples
 k = 0.7
 inc.period.sample <- sample(inc.period,1)
-inc.period.sample <- max(inc.period)
+# inc.period.sample <- max(inc.period)
 serial.interval <- inf_fn(rep(inc.period.sample,n),k)
 mean.serial.interval <- mean(serial.interval)
 perc.pre.symp <- sum(serial.interval<inc.period.sample)/n
@@ -62,12 +62,15 @@ data.frame(n=1:n,days=iso.delay) %>%
   geom_vline(aes(xintercept=inc.period.sample),color="red")+
   xlim(0,max(iso.delay))+ggtitle('Delay to isolation') -> p3
 data.frame(n=1:n,sec.infs=r0) %>% 
-  ggplot(aes(x=sec.infs))+
-  geom_histogram(fill="black",alpha=.5,aes(y = ..density..))+
-  geom_vline(aes(xintercept=mean.r0))+ggtitle('R0') -> p4
+  count(sec.infs) %>% mutate(density=n/sum(n)) %>% 
+  ggplot(aes(x=(sec.infs),y=density))+
+  geom_bar(stat="identity")+
+  coord_cartesian(xlim=c(0,20))+
+  # geom_histogram(fill="black",alpha=.5,aes(y = ..density..))+
+  geom_vline(aes(xintercept=mean.r0))+ggtitle('R0')+xlab("") -> p4
 
 png('plots/params.png',width = 7,height = 5,units = "in",res=300)
-(p1/p2/p3)|p4
+((p1/p2/p3)|p4) & theme_minimal()
 dev.off()
 
 # 

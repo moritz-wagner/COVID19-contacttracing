@@ -26,7 +26,7 @@ We have information on the frequency of a contact and the survey definitions of 
 * Rarely <1 times per month -> p=(0.5/30)
 * Never -> p=0
 
-We assume that, given a participant, the contacts for a single day are representative of any other day. So if we have a single contact of a certain frequency on day one, this contact is repeated for the remaining t-1 days. Then based on the frequencies above, this contact has probability p of being repeated. So for each day 1-p gives the probability that a contact is a new contact. If a new contact occurs, the probability of a further new contact on the following days is (1-p)^2, and so on. Random numbers between 0 and 1 are drawn each day to determine whether new contacts have occured. The current model accumulates contacts across a two week period (**sensitivity analysis?**). Weights are added to these contacts according to the expected frequency of contact during that period. Thus daily contacts will have a weight of 14, while new contacts have a weight of 1. Infections are later matched according to these weights during the infection step.
+We assume that, given a participant, the contacts for a single day are representative of any other day. So if we have a single contact of a certain frequency on day one, this contact is repeated for the remaining t-1 days. Then based on the frequencies above, this contact has probability p of being repeated. So for each day, 1-p gives the probability that a contact is a new contact. If a new contact occurs, the probability of a further new contact on the following days is (1-p)^2, and so on. Random numbers between 0 and 1 are drawn each day to determine whether new contacts have occurred. The current model accumulates contacts across a two week period (**sensitivity analysis?**). Weights are added to these contacts according to the expected frequency of contact during that period. Thus daily contacts will have a weight of 14, while new contacts have a weight of 1. Infections are later matched according to these weights during the infection step.
 
 The final output is a full contact data set with participant and contact ids. This defines the susceptible population during the outbreak and for each id (contact and participant), we keep track of who becomes infected.
 
@@ -45,11 +45,11 @@ This is an extension of the [LSHTM model](https://github.com/epiforecasts/ringbp
 Based on these, for each infection step we determine, which individuals become infected and/or isolated and/or traced. Once a contact becomes isolated, their R0 reduces to 0 and they can no longer infect other individuals. Different scenarios are illustrated in detail in [figure S8](https://www.medrxiv.org/content/medrxiv/suppl/2020/02/11/2020.02.08.20021162.DC1/2020.02.08.20021162-1.pdf) of the LSHTM study.
 
 ### Matching infections to contacts
-Given an infector with a number of potential infecteds, these now need to be matched to the infector's contacts. We consider two scenarios:
+Given an infector with a number of potential infecteds (based on a sample from R0), these now need to be matched to the infector's contacts. We consider two scenarios:
 1. The infector is a participant: We know all their contacts immediately.
-2. The infector is a contact: Here we don't know the full set of contacts. We know their household (HH) contacts, as these are linked to their participant. The non-household (non-HH) contacts are sampled from participants of the same age group. Note that this may introduce some biases as their may be a relationship between the number of HH and non-HH contacts by age.
+2. The infector is a contact: Here we don't know the full set of contacts. We know their household (HH) contacts, as these are linked to their participant. The non-household (non-HH) contacts are sampled from participants of the same age group. Note that this may introduce some biases as their may be a relationship between the number of HH and non-HH contacts by age. (**Need to sample by urban/rural as well**)
 
- We then assign which of the contacts become infected based on their weight. There are three scenarios where contacts do not become infected and thus the effective reproduction number is reduced:
+We then assign which of the contacts become infected based on their weight. There are three scenarios where contacts do not become infected and thus the effective reproduction number is reduced:
 1. A contact has already been infected. If *n*, the study population, is large most of these pre-existing infections will be HH contacts formed through HH clusters.
 2. The amount of contacts available to an infector, as there will be random draws of R0 that are larger than the total contacts.
 3. Duplicate infections. The model is run in generations, where each generation represents all the infections that occur from the infecteds of the previous generation. During the infection step, multiple infectors may infect the same individual. Again if *n*, the study population, is large most of these duplicated infections will be within the same HH.
@@ -83,5 +83,3 @@ See below a preliminary example output:
 * The average frequency of a contact for a given period determines the weighted risk of infection, i.e. more frequent contacts are more likely to become infected
 * Contacts over a two week period determine who gets traced and can get infected. Even if contacts become infected in a shorter period. The weighting of more frequent contacts (point above) offsets some of this bias, as frequent contacts are just as likely to occur during shorter periods as during longer ones.
 * Tracing and quarantine scenarios assume no delay to isolation, i.e. the time to find contacts is not considered
-
-

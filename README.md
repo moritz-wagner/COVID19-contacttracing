@@ -55,7 +55,7 @@ We then assign which of the contacts become infected based on their weight. Ther
 3. Duplicate infections. The model is run in generations, where each generation represents all the infections that occur from the infecteds of the previous generation. During the infection step, multiple infectors may infect the same individual. Again if *n*, the study population, is large most of these duplicated infections will be within the same HH.
 
 
-### Scenarios
+### Intervention Scenarios
 
 * **Isolation upon onset:** Here isolation occurs with a delay upon onset of symptoms, i.e. no tracing of contacts
 * **Tracing:** All traced contacts that are infected become isolated immediately upon symptom onset (apart from the ones that are missed or if asymptomatic)

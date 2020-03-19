@@ -34,60 +34,11 @@ contact_data[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts
                                                            missing.contacts[i],how_often,
                                                            on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
 
-##Bootstrapping and sampling from original contact data set to form a study population size of n---------
-contact_boot <- function(contact_data,n,p.urban) {
-  
-  contact_data %>%   
-    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
-  
-  contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
-  contact_data_simple <- as.data.table(contact_data_simple)
-  # contacts <- contact_data_simple[,.(contacts=.N),by=csid]
-  # 
-  # participants.urban <- unique(contact_data_simple[loc_stat=="urban",csid])
-  # participants.rural <- unique(contact_data_simple[loc_stat=="rural",csid])
-  # 
-  # ## Sample participants according to urban/rural prop
-  # participants <- data.table(csid.new=1:n,csid=c(sample(participants.urban,round(n*p.urban),replace = TRUE),
-  #                                                sample(participants.urban,n-round(n*p.urban),replace = TRUE)))
-  # 
-  
-  # contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],participants,by='csid')
-  # merge(contact.sample[,.(contact_id=unlist(contact_id)),by=csid.new],contact_data_simple,by="contact_id")[order(csid.new)]
-  
-  
-  part.sample <- contact_data_simple[,.(csid = sample(csid,replace=TRUE))][,.(weight=.N),keyby=csid]
-  contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],part.sample,by='csid')
-  contact.sample <- contact.sample[,.(contact_id=as.double(sample(unlist(contact_id),size = weight,replace = TRUE))),by=csid]
-  
-  contact_data_boot <- contact_data_simple[,-c("csid")][contact.sample, on = 'contact_id']
-  contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
-  
-  # ##Do some fixing of missing/inconsistent data
-  # #Fix missing howoften that are in HH to daily
-  # contact_data_boot[share_hh=="HH" & how_often=='Missing',how_often := 'Daily']
-  # ##Fix how_often missing and evermet==no to never
-  # contact_data_boot[ever_met=="No" & how_often=='Missing',how_often := 'Never']
-  # #Fix missing how_often and ever_met==Missing to sample based on rest of data 
-  # missing.contacts <- contact_data_boot[how_often=='Missing']
-  # 
-  # contact_data_boot[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts),
-  #                                                               function(i) sample(contact_data_boot[how_often!='Missing'][
-  #                                                                 missing.contacts[i],how_often,
-  #                                                                 on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
-  # 
-  
-  # missing.contacts[.(how_often=sample(contact_data_boot[,how_often]))]
-  # merge(missing.contacts,contact_data_boot[how_often!='Missing'],
-  #       by=c("age_class_part","age_class_cont","loc_stat","share_hh"))
-  # 
-  return(contact_data_boot)
-}
 
-##Bootstrapping and sampling from original contact data set to form a study population size of n---------
-contact_boot <- function(contact_data,n,p.urban) {
+##Bootstrapping and sampling from original contact data set by proportion urban vs rural by frequencies---------
+contact_sampling <- function(contact_data,p.urban,n=1000,freq="Daily") {
   
-  contact_data %>%   
+  contact_data %>% subset(share_hh=="HH" | how_often%in%freq) %>% 
     select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
   
   contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
@@ -99,119 +50,212 @@ contact_boot <- function(contact_data,n,p.urban) {
   
   ## Sample participants according to urban/rural prop
   participants <- data.table(csid.new=1:n,csid=c(sample(participants.urban,round(n*p.urban),replace = TRUE),
-                    sample(participants.urban,n-round(n*p.urban),replace = TRUE)))
+                                                 sample(participants.rural,n-round(n*p.urban),replace = TRUE)))
   
   
   contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],participants,by='csid')
   contact_data_boot <- merge(contact.sample[,.(contact_id=unlist(contact_id)),by=csid.new],contact_data_simple,by="contact_id")[order(csid.new)]
   contact_data_boot %<>% select(-csid) %>% mutate(csid=csid.new) %>% select(-csid.new) %>% data.table()
   
-  # 
-  # part.sample <- contact_data_simple[,.(csid = sample(csid,replace=TRUE))][,.(weight=.N),keyby=csid]
-  # contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],part.sample,by='csid')
-  # contact.sample <- contact.sample[,.(contact_id=as.double(sample(unlist(contact_id),size = weight,replace = TRUE))),by=csid]
-  # 
-  # contact_data_boot <- contact_data_simple[,-c("csid")][contact.sample, on = 'contact_id']
   contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
   
-  # ##Do some fixing of missing/inconsistent data
-  # #Fix missing howoften that are in HH to daily
-  # contact_data_boot[share_hh=="HH" & how_often=='Missing',how_often := 'Daily']
-  # ##Fix how_often missing and evermet==no to never
-  # contact_data_boot[ever_met=="No" & how_often=='Missing',how_often := 'Never']
-  # #Fix missing how_often and ever_met==Missing to sample based on rest of data 
-  # missing.contacts <- contact_data_boot[how_often=='Missing']
-  # 
-  # contact_data_boot[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts),
-  #                                                               function(i) sample(contact_data_boot[how_often!='Missing'][
-  #                                                                 missing.contacts[i],how_often,
-  #                                                                 on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
-  # 
-  
-  # missing.contacts[.(how_often=sample(contact_data_boot[,how_often]))]
-  # merge(missing.contacts,contact_data_boot[how_often!='Missing'],
-  #       by=c("age_class_part","age_class_cont","loc_stat","share_hh"))
-  # 
   return(contact_data_boot)
 }
 
+##Bootstrapping and sampling from original contact data set to form a study population size of n---------
+contact_boot <- function(contact_data,n,p.urban,freq) {
+  
+  contact_data %>% subset(share_hh=="HH" | how_often%in%freq) %>% 
+    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
+  
+  contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
+  contact_data_simple <- as.data.table(contact_data_simple)
+  contacts <- contact_data_simple[,.(contacts=.N),by=csid]
+  
+  participants.urban <- unique(contact_data_simple[loc_stat=="urban",csid])
+  participants.rural <- unique(contact_data_simple[loc_stat=="rural",csid])
+  
+  ## Sample participants according to urban/rural prop
+  participants <- data.table(csid.new=1:n,csid=c(sample(participants.urban,round(n*p.urban),replace = TRUE),
+                                                 sample(participants.rural,n-round(n*p.urban),replace = TRUE)))
+  
+  
+  contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],participants,by='csid')
+  contact_data_boot <- merge(contact.sample[,.(contact_id=unlist(contact_id)),by=csid.new],contact_data_simple,by="contact_id")[order(csid.new)]
+  contact_data_boot %<>% select(-csid) %>% mutate(csid=csid.new) %>% select(-csid.new) %>% data.table()
+  
+  
+  contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
+  
+  return(contact_data_boot)
+}
 
 ##Given a single contact with probability p of being repeated each dat (based on frequency)
 # how many new such contacts will be made in t days (with some randomness)
 new.contacts <- function(t,p) {
-  n.c <- 1
-  P <- 1-p
-  for (i in 2:t) {
-    if (runif(1) <= P) {
-      P <- P*(1-p)
-      n.c <- n.c+1
+  n.c <- t
+  if (p>0 & p<1) {
+    n.c <- 1
+    P <- 1-p
+    for (i in 2:t) {
+      if (runif(1) <= P) {
+        P <- P*(1-p)
+        n.c <- n.c+1
+      }
     }
   }
   return(n.c)
 }
 
-
-##Count number of contacts for a given period weighting by "how_often" and "ever_met" measure
-##output: list of contacts and a weight for becoming infected across time t
-count.contacts <- function(id,CD,t=14) {
+##Given a contact data set, sample n individuals from it and output all the contacts across time t
+#Then take a sampled subset to roughly match the desired population size
+count.contacts <- function(CD,t=14,p.urban = .3,freq="Daily",pop=200000) {
   
-  ## Add weights to count how many contacts are repeated during t
+  #Bootstrap pop/20 participants to get a large enough group, since on average people have 20 contacts
+  
+  # p.rep <- c(Daily=1,Often=1.5/7,Regularly=1.5/30,Rarely=.5/30,Never=0)
+  # mean.new <- 1+(1-p.rep)*(t-1)
+  # mean_ct <- cbind(CD[,.N,by=.(how_often,csid)][,.(ct=mean(N)),by=how_often],mean.new)[,(ct=sum(ct+mean.new))]
+  # 
+  ##Get sample from contct data with urban prop. n = desired population size divded by the mean number of contacts per participant
+  CD_boot <- contact_sampling(CD,p.urban,freq = freq,n=round(pop/mean(CD[how_often%in%freq,.N,by=csid]$N)))
+  
+  #Split into daily and non-daily to save us some work
+  CD_boot_daily <- CD_boot[how_often=="Daily",]
+  CD_boot_non_daily <- CD_boot[how_often!="Daily",]
+  
+  ## Add weights to count how many contacts are repeated during t (for non-daily)
   weights <- c(1,0,1.5/7,1.5/30,.5/30,0)
-  CD$weights <- weights[as.numeric(CD$how_often)]
+  CD_boot_non_daily$weights <- weights[as.numeric(CD_boot_non_daily$how_often)]
   
-  id.contacts <- CD[csid==id]
-  new.id.contacts <- id.contacts
+  ## Count how many new contacts of each type were made during t days (for non-daily)
+  CD_boot_non_daily[,':='(new.count = new.contacts(t,weights)),by=contact_id]
   
-  if (nrow(id.contacts)!=0) {
-    
-    ## Count how many new contacts of each type were made during t days
-    id.contacts <- id.contacts[,':='(new.count = new.contacts(t,weights)),by=contact_id]
-    
-    ##Extend by new contacts and give them new ids
-    new.id.contacts <- id.contacts[,.(new.contact_id=rep(contact_id,new.count)),by=c(colnames(id.contacts)[1:9])][,-"new.contact_id"]
-    new.id.contacts$contact_id <- 1:nrow(new.id.contacts)  
-    
-  }
+  ##Extend by new contacts and give them new ids (for non-daily)
+  CD_boot_non_daily <- CD_boot_non_daily[how_often!="Daily",][,.(contact_id=rep(contact_id,new.count)),
+                                                              by=c(colnames(CD_boot_non_daily)[1:9])][,-"contact_id"]
+  
+  ##Combine daily and new non-daily
+  CD_new <- bind_rows(CD_boot_daily,CD_boot_non_daily)[order(csid),]
+  ##Sample to roughly get desired population size
+  parts <- sample(unique(CD_new$csid),round(pop/mean(CD_new[how_often%in%freq,.N,by=csid]$N)))
+  parts <- data.table(csid=parts,age=CD_new[csid%in%parts,.N,by=.(csid,age_class_part)][,age_class_part])
+  CD_new <- CD_new[csid%in%parts$csid]
+  
+  ##Add contacts ids
+  CD_new$contact <- 1:nrow(CD_new)  
   
   #Add final weights for how often each contact was made during t
   t.weights <- c(1,1/t,1.5/7,1.5/30,.5/30,1/t)*t
-  new.id.contacts$weight <- t.weights[as.numeric(new.id.contacts$how_often)]
+  CD_new$weight <- t.weights[as.numeric(CD_new$how_often)]
   
-  return(new.id.contacts)
+  CD_new$contact=paste(CD_new$csid,CD_new$contact,sep='.')
+  
+  return(list(parts,CD_new))
 }
 
-##Given a contact data set, bootstrap and output all the contacts across time t
-count.contacts.full <- function(CD,t=14) {
+##Given a contact data set, sample n individuals from it and output all the contacts across time t
+#Then take a sampled subset to roughly match the desired population size
+count.contacts2 <- function(CD,t=14,p.urban = .3,freq="Daily",pop=200000) {
   
-  CD_boot <- contact_boot(CD,n = 10000,p.urban = .3)
+  #Bootstrap pop/20 participants to get a large enough group, since on average people have 20 contacts
   
-  # participants <- unique(CD_boot$csid)
-  
-  participants <- CD_boot[,.(age=unique(age_class_part)),by=csid]
-  
-  # system.time(t_contacts <- bind_rows(participants %>% purrr::map(~count.contacts(.x,CD_boot,t))))
+  # p.rep <- c(Daily=1,Often=1.5/7,Regularly=1.5/30,Rarely=.5/30,Never=0)
+  # mean.new <- 1+(1-p.rep)*(t-1)
+  # mean_ct <- cbind(CD[,.N,by=.(how_often,csid)][,.(ct=mean(N)),by=how_often],mean.new)[,(ct=sum(ct+mean.new))]
   # 
-  # system.time(t_contacts <- bind_rows(lapply(participants,function(x) count.contacts(x,CD_boot,t))))
+  ##Get sample from contct data with urban prop. n = desired population size divded by the mean number of contacts per participant
+  CD_boot <- contact_sampling(CD,p.urban,freq = freq,n=round(pop/mean(CD[how_often%in%freq,.N,by=csid]$N)))
   
-  t_contacts <- bind_rows(parallel::mclapply(participants$csid,function(x) count.contacts(x,CD_boot,t),mc.cores = 4))[,c(9,1:8,10)]
+  #Split into daily and non-daily to save us some work
+  CD_boot_daily <- CD_boot[how_often=="Daily",]
+  CD_boot_non_daily <- CD_boot[how_often!="Daily",]
   
-  t_contacts$contact=paste(t_contacts$csid,t_contacts$contact_id,sep='.')
+  ## Add weights to count how many contacts are repeated during t (for non-daily)
+  weights <- c(1,0,1.5/7,1.5/30,.5/30,0)
+  CD_boot_non_daily$weights <- weights[as.numeric(CD_boot_non_daily$how_often)]
+  
+  ## Count how many new contacts of each type were made during t days (for non-daily)
+  CD_boot_non_daily[,':='(new.count = new.contacts(t,weights)),by=contact_id]
+  
+  ##Extend by new contacts and give them new ids (for non-daily)
+  CD_boot_non_daily <- CD_boot_non_daily[how_often!="Daily",][,.(contact_id=rep(contact_id,new.count)),
+                                                              by=c(colnames(CD_boot_non_daily)[1:9])][,-"contact_id"]
+  
+  ##Combine daily and new non-daily
+  CD_new <- bind_rows(CD_boot_daily,CD_boot_non_daily)[order(csid),]
+  ##Sample to roughly get desired population size
+  parts <- sample(unique(CD_new$csid),round(pop/mean(CD_new[how_often%in%freq,.N,by=csid]$N)))
+  parts <- data.table(csid=parts,age=CD_new[csid%in%parts,.N,by=.(csid,age_class_part)][,age_class_part])
+  CD_new <- CD_new[csid%in%parts$csid]
+  
+  ##Add contacts ids
+  CD_new$contact <- 1:nrow(CD_new)  
+  
+  #Add final weights for how often each contact was made during t
+  t.weights <- c(1,1/t,1.5/7,1.5/30,.5/30,1/t)*t
+  CD_new$weight <- t.weights[as.numeric(CD_new$how_often)]
+  
+  CD_new$contact=paste(CD_new$csid,CD_new$contact,sep='.')
   
   
-  # participants_demo <- dcast(t_contacts[,.(count=.N),by=.(csid,age_class_part,share_hh)],
-  #                            csid+age_class_part~share_hh)
-  # colnames(participants_demo) <- c("id","age","no.nHH.con","no.con")
-  # participants_demo[is.na(participants_demo[,no.nHH.con]),`:=`(no.nHH.con=0)]
-  # participants_demo[is.na(participants_demo[,no.con]),`:=`(no.con=0)]
-  # participants_demo[,`:=`(no.con=no.con+no.nHH.con)]
+  ### Now create full set of contacts for participants + contacts to form a close network
+  parts
+  parts.age <- parts[,.(csid=list(csid)),by=age]
+  parts_full <- bind_rows(parts[,`:=`(csid=as.character(csid))],CD_new[,.(csid=contact,age=age_class_cont)])
   
+  # x <- CD_new[,.(hh.contact_id=list(contact[share_hh=='HH']),
+  #                contact_id=list(contact[share_hh!='HH']),
+  #                hh.weight=list(weight[share_hh=='HH']),
+  #                nhh.weight=list(weight[share_hh!='HH'])),by=csid]
   
-  # participants_demo<-data.frame(id=participants,
-  #                               age=t_contacts$age_class_part[match(participants,t_contacts$csid)],
-  #                               no.con= sapply(participants, function(p)sum(t_contacts$csid==p)),
-  #                               no.nHH.con=sapply(participants, function(p)sum(t_contacts$csid==p & t_contacts$share_hh=="non-HH")))
+  # x <- CD_new[,.(hh.contact_id=list(contact[share_hh=='HH']),
+  #                nhh.contact_id=list(contact[share_hh!='HH']),
+  #                contact_id=list(contact),
+  #                weight=list(weight)),by=csid]
   
-  # return(list(participants,t_contacts,participants_demo))
-  return(list(participants,t_contacts))
+  x <- CD_new[,.(hh.contact_id=list(contact[share_hh=='HH']),
+                 hh.weight=list(weight[share_hh=='HH']),
+                 nhh.contact_id=list(contact[share_hh!='HH']),
+                 nhh.weight=list(weight[share_hh!='HH'])),
+              by=csid][,`:=`(csid=csid)]
   
+  ## non-HH contacts
+  y.nhh <- CD_new[share_hh!="HH",.(csid=contact,age=age_class_cont)]
+  # y.nhh[,parts.age[age==age,sample(unlist(csid),1)],by=csid]
+  y <- merge(parts.age,y.nhh[,.(.N,csid.orig=list(csid)),by=age])
+  y.nhh <- data.table(bind_cols(csid=y.nhh[order(age)]$csid,
+                                y[,.(csid.match=as.character(sample(unlist(csid),N,replace = TRUE))),
+                                  by=age]))
+  y.nhh <- merge(y.nhh,x[,`:=`(csid.match=as.character(csid))][,-"csid"])[order(csid),-"csid.match"]
+  
+  ## HH contacts
+  y.hh <- CD_new[share_hh=="HH",.(csid=contact,age=age_class_cont)]
+  y <- merge(parts.age,y.hh[,.(.N,csid.orig=list(csid)),by=age])
+  y.hh <- data.table(bind_cols(csid=y.hh[order(age)]$csid,
+                                y[,.(csid.match=as.character(sample(unlist(csid),N,replace = TRUE))),
+                                  by=age]))
+  #Get non-HH contacts by taking all the contacts of a random individual of same age
+  y.hh <- merge(y.hh,x[,`:=`(csid.match=as.character(csid))][,-c("csid","hh.contact_id","hh.weight")])[order(csid),-"csid.match"]
+  
+  #Get their HH contacts by using the same ones as their original HH contactee (and swapping the csid with the contactees csid)
+  y.hh <- merge(y.hh[,`:=`(csid.match=floor(as.numeric(csid)))],
+                x[,`:=`(csid.match=csid)][,c("csid.match","hh.contact_id","hh.weight")])[,-"csid.match"]
+  y.hh2 <- y.hh[,.(hh.contact_id=unlist(hh.contact_id)),by=csid][,`:=`(hh.contact_id=ifelse(csid==hh.contact_id,
+                                                                                  floor(as.numeric(hh.contact_id)),
+                                                                                  hh.contact_id))]
+  y.hh$hh.contact_id <- y.hh2[,.(hh.contact_id=list(hh.contact_id)),by=csid][,-"csid"]
+  
+  ## Put them together
+  y <- bind_rows(y.hh,y.nhh)[order(csid)]
+  
+  ##now put the full contact dataset set
+  
+  parts_full <- bind_rows(parts[,`:=`(csid=as.character(csid))],CD_new[,.(csid=contact,age=age_class_cont)])
+  CD_new_full <- bind_rows(x[,`:=`(csid=as.numeric(csid))][,-"csid.match"],
+                           y[,`:=`(csid=as.numeric(csid))][,-"age"])[
+                             order(csid)]
+  
+  return(list(parts_full,CD_new_full))
 }
+

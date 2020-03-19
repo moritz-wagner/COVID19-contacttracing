@@ -73,12 +73,27 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
     return(out)
   }
   
+  # new_case_data$exposure
+  # unlist(purrr::map2(new_case_data$new_cases,
+  #                    new_case_data$onset,
+  #                    function(x, y) {
+  #                      inf_fn(rep(y, x), k)
+  #                    })) %>% sort
+  # unlist(purrr::pmap(list(new_case_data$new_cases,
+  #                         new_case_data$onset,
+  #                         new_case_data$exposure),
+  #                    function(x, y, z) {
+  #                      inf_fn(rep(y-z, x), k)+z
+  #                    })) %>% sort
+  # 
   # Assign incubation periods for each new case
   inc_samples <- incfn(total_new_cases) 
   # Assign variables for the potential secondary cases
-  prob_samples <- data.table(exposure = unlist(purrr::map2(new_case_data$new_cases, 
-                                                           new_case_data$onset, function(x, y) {
-                                                             inf_fn(rep(y, x), k)
+  prob_samples <- data.table(exposure = unlist(purrr::pmap(list(new_case_data$new_cases,
+                                                                new_case_data$onset,
+                                                                new_case_data$exposure),
+                                                           function(x, y, z) {
+                                                             inf_fn(rep(y-z, x), k)+z
                                                            })),
                              infector = unlist(purrr::map2(new_case_data$caseid,
                                                            new_case_data$new_cases, function(x, y) {
@@ -98,6 +113,7 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
                              incubfn_sample = inc_samples,
                              isolated = FALSE, 
                              new_cases = NA)
+  
   # If infection time was before source isolation time, then keep the new cases and assign an onset time
   prob_samples <- prob_samples[exposure < infector_iso_time][, 
                                                              `:=`(onset = exposure + incubfn_sample)]
@@ -233,11 +249,20 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
   # Sec case id
   # prob_samples$caseid <- NA
   #Assign case ids
-  prob_samples$caseid <- unlist(sapply(case.assign.inf,function(x) {
-    sample(c(x$sec.case.id,
-             rep(NA,nrow(prob_samples[infector==x$infector])-length(x$sec.case.id))))
+  if (nrow(prob_samples)==sum(sapply(case.assign.inf,function(x) length(x$sec.case.id)))) {
+    prob_samples$caseid <- unlist(sapply(case.assign.inf,function(x) {x$sec.case.id}))
+  } else {
+    prob_samples$caseid <- unlist(sapply(case.assign.inf,function(x) {
+      ids <- c(x$sec.case.id,
+               rep(NA,nrow(prob_samples[infector==x$infector])-length(x$sec.case.id)))
+      if (length(ids)==1) {
+        ids
+      } else {
+        sample(ids)
+      }
+    }
+    ))
   }
-  ))
   
   # system.time(unlist(sapply(unique(prob_samples$infector),case.id.assignement)))
   # system.time(unlist(unique(prob_samples$infector) %>% purrr::map(~case.id.assignement(.x))))
@@ -328,19 +353,24 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
 # --- Run a single instance of the branching process model
 # This function is more of less the same function in the 'ringbp' library
 outbreak_model_ext<-function (num.initial.cases = NULL, prop.ascertain = NULL, cap_max_days = NULL, 
-                              cap_cases = NULL, r0isolated = NULL, r0community = NULL, 
+                              cap_cases = NULL, cap_max_hhcon=NULL, cap_max_nhhcon=NULL, 
+                              r0isolated = NULL, r0community = NULL, 
                               disp.iso = NULL, disp.com = NULL, k = NULL, delay_shape = NULL, 
                               delay_scale = NULL, prop.asym = NULL, quarantine = NULL,
-                              HH_trace=NULL,contact_data=NULL) 
+                              HH_trace=NULL,
+                              contact_data=NULL,t=NULL,p.urban=NULL,freq =NULL,
+                              pop=NULL) 
 {
   # Bootstrap contacts for t=14 days
   # CD <- count.contacts.full(contact_data,t=14)
-  CD <- contact_data
+  CD <- count.contacts(contact_data,t=t,p.urban = p.urban,freq=freq,pop=pop) 
   
   # Set up params
   incfn <- dist_setup(dist_shape = 2.322737, dist_scale = 6.492272)
   delayfn <- dist_setup(delay_shape, delay_scale)
   total.cases <- num.initial.cases
+  total.hh.con <- 0
+  total.nhh.con <- 0
   latest.onset <- 0
   extinct <- FALSE
   case_data <- outbreak_setup_ext(num.initial.cases = num.initial.cases,case_ids = CD[[1]]$csid, 
@@ -352,33 +382,48 @@ outbreak_model_ext<-function (num.initial.cases = NULL, prop.ascertain = NULL, c
   dep.dup_vect <- c()
   dep.HH_vect <- c()
   dep.nHH_vect <- c()
+  cases_in_gen_vect <- c()
   # gen <- 1
-  # cases_in_gen_vect <- c()
-  while (latest.onset < cap_max_days & total.cases < cap_cases & 
-         !extinct) {
+  cases_in_gen_vect <- c()
+  while (!extinct & latest.onset < cap_max_days & total.cases < cap_cases & 
+         total.hh.con < cap_max_hhcon &  total.nhh.con < cap_max_nhhcon) {
     out <- outbreak_step_ext(case_data = case_data, disp.iso = disp.iso, 
                              disp.com = disp.com, r0isolated = r0isolated, r0community = r0community, 
                              incfn = incfn, delayfn = delayfn, prop.ascertain = prop.ascertain, 
                              k = k, quarantine = quarantine, prop.asym = prop.asym,
                              HH_trace=HH_trace,
                              contact_data=CD)
-    case_data <- out$cases
+    
+    
+    ##Can remove all the cases that were exposed after cap_max_days, as these can only infect cases we're not interested in
+    case_data <- out$cases[exposure<cap_max_days]
+    # case_data <- out$cases
+    
+    #Add to our vectors
     effective_r0_vect <- c(effective_r0_vect, out$effective_r0)
     dep.con_vect <- c(dep.con_vect, out$dep.con)
     dep.dup_vect <- c(dep.dup_vect, out$dep.dup)
     dep.HH_vect <- c(dep.HH_vect, out$dep.HH)
     dep.nHH_vect <- c(dep.nHH_vect, out$dep.nHH)
+    cases_in_gen_vect <- c(cases_in_gen_vect, nrow(out$cases[is.na(new_cases)]))
     
-    # cases_in_gen_vect <- c(cases_in_gen_vect, out[[3]])
-    total.cases <- nrow(case_data)
+    # total.cases <- nrow(case_data)
+    total.cases <- nrow(case_data[onset<cap_max_days]) ## Want total cases up until cap time!
+    # total.cases <- nrow(case_data)
     # latest.onset <- max(case_data$onset)
-    latest.onset <- min(case_data[is.na(new_cases),onset]) #earliest onset of latest generation, to make sure all the cases are included
-    extinct <- all(case_data$isolated)
-    latest.onset
+    # latest.onset <- min(case_data[is.na(new_cases),onset]) #earliest onset of latest generation, to make sure all the cases are included??
+    latest.onset <- min(case_data[is.na(new_cases),exposure]) #earliest onset of latest generation, to make sure all the cases are included??
+    extinct <- all(out$cases$isolated)
+    # latest.onset
+    total.hh.con <- sum(case_data$hh.con,na.rm =TRUE)*HH_trace
+    total.nhh.con <- sum(case_data$nhh.con,na.rm =TRUE)*prop.ascertain
+    # case_data[order(exposure)]
     # gen <- gen+1
   }
   # gen
   extinct
+  cases_in_gen_vect
+  cumsum(cases_in_gen_vect)
   length(effective_r0_vect)
   
   if (nrow(case_data)==num.initial.cases) {
@@ -410,6 +455,7 @@ outbreak_model_ext<-function (num.initial.cases = NULL, prop.ascertain = NULL, c
   #                                     cases_per_gen = list(cases_in_gen_vect))]
   return(list(weekly_cases=weekly_cases,
               gen_vect=data.table(gen=1:length(effective_r0_vect),
+                                  cases_in_gen=cases_in_gen_vect,
                                   effective_r0=effective_r0_vect,
                                   dep.con=dep.con_vect,
                                   dep.dup=dep.dup_vect,
@@ -424,6 +470,7 @@ outbreak_model <- function (num.initial.cases = NULL, prop.ascertain = NULL, cap
                             disp.iso = NULL, disp.com = NULL, k = NULL, delay_shape = NULL, 
                             delay_scale = NULL, prop.asym = NULL, quarantine = NULL) 
 {
+  
   incfn <- dist_setup(dist_shape = 2.322737, dist_scale = 6.492272)
   delayfn <- dist_setup(delay_shape, delay_scale)
   total.cases <- num.initial.cases
@@ -463,9 +510,9 @@ outbreak_model <- function (num.initial.cases = NULL, prop.ascertain = NULL, cap
                                                           na.rm = TRUE), cases_per_gen = list(cases_in_gen_vect))]
   return(weekly_cases)
 }
-  
-  
-  
+
+
+
 
 
 # --- Running multiple simulations
@@ -479,7 +526,8 @@ scenario_sim_ext<-function (n.sim = NULL, prop.ascertain = NULL, cap_max_days = 
 {
   res <- purrr::map(.x = 1:n.sim, ~outbreak_model_ext(num.initial.cases = num.initial.cases, 
                                                       prop.ascertain = prop.ascertain, cap_max_days = cap_max_days, 
-                                                      cap_cases = cap_cases, r0isolated = r0isolated, r0community = r0community, 
+                                                      cap_cases = cap_cases, cap_max_hhcon=cap_max_hhcon, cap_max_nhhcon=cap_max_nhhcon,
+                                                      r0isolated = r0isolated, r0community = r0community, 
                                                       disp.iso = disp.iso, disp.com = disp.com, delay_shape = delay_shape, 
                                                       delay_scale = delay_scale, k = k, prop.asym = prop.asym, 
                                                       quarantine = quarantine,HH_trace = HH_trace,
@@ -502,10 +550,13 @@ scenario_sim_ext<-function (n.sim = NULL, prop.ascertain = NULL, cap_max_days = 
 
 # Same function but using foreach packacge to increase speed
 scenario_sim_ext_parallel<-function (n.sim = NULL, prop.ascertain = NULL, cap_max_days = NULL, 
-                                     cap_cases = NULL, r0isolated = NULL, r0community = NULL, 
+                                     cap_cases = NULL, cap_max_hhcon=NULL, cap_max_nhhcon=NULL, 
+                                     r0isolated = NULL, r0community = NULL, 
                                      disp.iso = NULL, disp.com = NULL, k = NULL, delay_shape = NULL, 
                                      delay_scale = NULL, num.initial.cases = NULL, prop.asym = NULL, 
-                                     quarantine = NULL,HH_trace = NULL,contact_data=NULL) 
+                                     quarantine = NULL,HH_trace = NULL,
+                                     contact_data=NULL,t=NULL,p.urban=NULL,freq = NULL,
+                                     pop=NULL) 
 {
   # doParallel::registerDoParallel(cores=4)
   # require(foreach)
@@ -521,18 +572,21 @@ scenario_sim_ext_parallel<-function (n.sim = NULL, prop.ascertain = NULL, cap_ma
   # }
   
   # CD <- count.contacts.full(contact_data,t=14)
-  CD <- contact_data
+  # CD <- contact_data
   
   res <- parallel::mclapply(1:n.sim,
                             function(x) {
                               outbreak_model_ext(num.initial.cases = num.initial.cases, 
                                                  prop.ascertain = prop.ascertain, cap_max_days = cap_max_days, 
-                                                 cap_cases = cap_cases, r0isolated = r0isolated, r0community = r0community, 
+                                                 cap_cases = cap_cases, cap_max_hhcon=cap_max_hhcon, cap_max_nhhcon=cap_max_nhhcon, 
+                                                 r0isolated = r0isolated, r0community = r0community, 
                                                  disp.iso = disp.iso, disp.com = disp.com, delay_shape = delay_shape, 
                                                  delay_scale = delay_scale, k = k, prop.asym = prop.asym, 
                                                  quarantine = quarantine,HH_trace = HH_trace,
-                                                 contact_data=CD)
-                              }
+                                                 contact_data=contact_data,p.urban = p.urban,
+                                                 t=t,freq = freq,
+                                                 pop=pop)
+                            }
                             ,mc.cores = parallel::detectCores())
   
   
@@ -552,10 +606,10 @@ scenario_sim_ext_parallel<-function (n.sim = NULL, prop.ascertain = NULL, cap_ma
 }
 
 scenario_sim <- function (n.sim = NULL, prop.ascertain = NULL, cap_max_days = NULL, 
-          cap_cases = NULL, r0isolated = NULL, r0community = NULL, 
-          disp.iso = NULL, disp.com = NULL, k = NULL, delay_shape = NULL, 
-          delay_scale = NULL, num.initial.cases = NULL, prop.asym = NULL, 
-          quarantine = NULL) 
+                          cap_cases = NULL, r0isolated = NULL, r0community = NULL, 
+                          disp.iso = NULL, disp.com = NULL, k = NULL, delay_shape = NULL, 
+                          delay_scale = NULL, num.initial.cases = NULL, prop.asym = NULL, 
+                          quarantine = NULL) 
 {
   
   res <- parallel::mclapply(1:n.sim,
@@ -569,7 +623,7 @@ scenario_sim <- function (n.sim = NULL, prop.ascertain = NULL, cap_max_days = NU
                             }
                             ,mc.cores = parallel::detectCores())
   
-
+  
   res <- bind_rows(res)
   res$sim <- rep(1:n.sim,each=max(res$week)+1)
   # res[, `:=`(sim, rep(1:n.sim, rep(floor(cap_max_days/7) + 

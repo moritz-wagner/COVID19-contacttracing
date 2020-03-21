@@ -35,6 +35,32 @@ contact_data[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts
                                                            missing.contacts[i],how_often,
                                                            on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
 
+##Sampling from original contact data set by proportion urban vs rural by frequencies---------
+contact_sampling <- function(contact_data,p.urban,n=1000,freq="Daily") {
+  
+  contact_data %>% subset(share_hh=="HH" | how_often%in%freq) %>% 
+    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
+  
+  contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
+  contact_data_simple <- as.data.table(contact_data_simple)
+  contacts <- contact_data_simple[,.(contacts=.N),by=csid]
+  
+  participants.urban <- unique(contact_data_simple[loc_stat=="urban",csid])
+  participants.rural <- unique(contact_data_simple[loc_stat=="rural",csid])
+  
+  ## Sample participants according to urban/rural prop
+  participants <- data.table(csid.new=1:n,csid=c(sample(participants.urban,round(n*p.urban),replace = TRUE),
+                                                 sample(participants.rural,n-round(n*p.urban),replace = TRUE)))
+  
+  
+  contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],participants,by='csid')
+  contact_data_boot <- merge(contact.sample[,.(contact_id=unlist(contact_id)),by=csid.new],contact_data_simple,by="contact_id")[order(csid.new)]
+  contact_data_boot %<>% select(-csid) %>% mutate(csid=csid.new) %>% select(-csid.new) %>% data.table()
+  
+  contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
+  
+  return(contact_data_boot)
+}
 
 ##Bootstrapping and sampling from original contact data set to form a study population size of n---------
 contact_boot <- function(contact_data,n,p.urban,freq) {

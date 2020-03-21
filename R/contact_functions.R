@@ -14,13 +14,14 @@ levels(contact_data$season) <- c("dry","wet")
 levels(contact_data$share_hh) <- c("Missing","non-HH","HH")
 contact_data$share_hh[contact_data$share_hh=="Missing"] <- "non-HH"
 
+#Match age groups
 levels(contact_data$age_class_cont) <- c(5,1,6,2,3,4)
 contact_data$age_class_cont <- factor(contact_data$age_class_cont,levels = sort(levels(contact_data$age_class_cont)))
 levels(contact_data$age_class_cont) <- age_groups
 levels(contact_data$age_class_part) <- age_groups
 contact_data$csid <- as.integer(as.character(contact_data$csid))
-
 contact_data <- data.table(contact_data)
+
 ##Do some fixing of missing/inconsistent data
 #Fix missing howoften that are in HH to daily
 contact_data[share_hh=="HH" & how_often=='Missing',how_often := 'Daily']
@@ -34,33 +35,6 @@ contact_data[how_often=='Missing',"how_often"] <- sapply(1:nrow(missing.contacts
                                                            missing.contacts[i],how_often,
                                                            on=.(age_class_part,age_class_cont,loc_stat,share_hh)],1))
 
-
-##Bootstrapping and sampling from original contact data set by proportion urban vs rural by frequencies---------
-contact_sampling <- function(contact_data,p.urban,n=1000,freq="Daily") {
-  
-  contact_data %>% subset(share_hh=="HH" | how_often%in%freq) %>% 
-    select(csid,age_class_part,day,age_class_cont,loc_stat,share_hh,how_often,ever_met) -> contact_data_simple
-  
-  contact_data_simple$contact_id <- seq(1,length.out = nrow(contact_data_simple))
-  contact_data_simple <- as.data.table(contact_data_simple)
-  contacts <- contact_data_simple[,.(contacts=.N),by=csid]
-  
-  participants.urban <- unique(contact_data_simple[loc_stat=="urban",csid])
-  participants.rural <- unique(contact_data_simple[loc_stat=="rural",csid])
-  
-  ## Sample participants according to urban/rural prop
-  participants <- data.table(csid.new=1:n,csid=c(sample(participants.urban,round(n*p.urban),replace = TRUE),
-                                                 sample(participants.rural,n-round(n*p.urban),replace = TRUE)))
-  
-  
-  contact.sample <- merge(contact_data_simple[,.(contact_id=list(c(contact_id))),by=csid],participants,by='csid')
-  contact_data_boot <- merge(contact.sample[,.(contact_id=unlist(contact_id)),by=csid.new],contact_data_simple,by="contact_id")[order(csid.new)]
-  contact_data_boot %<>% select(-csid) %>% mutate(csid=csid.new) %>% select(-csid.new) %>% data.table()
-  
-  contact_data_boot$contact_id <- seq(1,length.out = nrow(contact_data_boot))
-  
-  return(contact_data_boot)
-}
 
 ##Bootstrapping and sampling from original contact data set to form a study population size of n---------
 contact_boot <- function(contact_data,n,p.urban,freq) {
@@ -90,7 +64,7 @@ contact_boot <- function(contact_data,n,p.urban,freq) {
   return(contact_data_boot)
 }
 
-##Given a single contact with probability p of being repeated each dat (based on frequency)
+##Given a single contact with probability p of being repeated each day (based on reported frequency of conatact)
 # how many new such contacts will be made in t days (with some randomness)
 new.contacts <- function(t,p) {
   n.c <- t

@@ -138,6 +138,18 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
   prob_samples <- prob_samples[!infector%in%new_case_data2[con==0,csid],]
   new_case_data2 <- new_case_data2[!con==0,]
   
+  # If no more contacts left, no more infections
+  if (nrow(prob_samples)==0) {
+    case_data$isolated <- TRUE
+    effective_r0 <- 0
+    # cases_in_gen <- 0
+    out <- list(case_data, effective_r0,0,0,0,0,0)
+    names(out) <- c("cases", "effective_r0","dep.iso","dep.con","dep.dup","dep.HH","dep.nHH")
+    # out <- list(case_data, effective_r0)
+    # names(out) <- c("cases", "effective_r0")
+    return(out)
+  }
+  
   #Sample infecteds from the contacts available by weight
   z <- new_case_data2[,`:=`(inf_id=list(sample(x = unlist(contact_id),
                                                size = min(N,con),
@@ -192,18 +204,6 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
                by=.(caseid)]
   
   
-  # If after considering local network of susceptibles there are no secondary cases
-  if (all(is.na(prob_samples$caseid))) {
-    case_data$isolated <- TRUE
-    effective_r0 <- 0
-    # cases_in_gen <- 0
-    out <- list(case_data, effective_r0,0,0,0,0,0)
-    names(out) <- c("cases", "effective_r0","dep.iso","dep.con","dep.dup","dep.HH","dep.nHH")
-    # out <- list(case_data, effective_r0)
-    # names(out) <- c("cases", "effective_r0")
-    return(out)
-  }
-  
   ##Different depletion scenarios
   ##Infector isolated
   dep.iso = dep.iso/total_new_cases
@@ -223,7 +223,8 @@ outbreak_step_ext<-function (case_data = NULL, disp.iso = NULL, disp.com = NULL,
   #Remove assigned ids that are already infected (HH and non-HH)
   prob_samples <- prob_samples[!caseid%in%case_data$caseid]
   
-  if (all(is.na(prob_samples$caseid))) {
+  # If everyone infected already, no more infections
+  if (nrow(prob_samples)==0) {
     case_data$isolated <- TRUE
     effective_r0 <- 0
     # cases_in_gen <- 0
@@ -427,6 +428,21 @@ scenario_sim_ext_parallel<-function (n.sim = NULL, prop.ascertain = NULL, cap_ma
                             }
                             ,mc.cores = parallel::detectCores())
              )
+  
+  # res <- list()
+  # for (i in 1:nsim) {
+  #   res[[i]] <- outbreak_model_ext(num.initial.cases = num.initial.cases,
+  #                                  prop.ascertain = prop.ascertain, cap_max_days = cap_max_days,
+  #                                  cap_cases = cap_cases, cap_max_hhcon=cap_max_hhcon, cap_max_nhhcon=cap_max_nhhcon,
+  #                                  r0isolated = r0isolated, r0community = r0community,
+  #                                  disp.iso = disp.iso, disp.com = disp.com, delay_shape = delay_shape,
+  #                                  delay_scale = delay_scale, k = k, prop.asym = prop.asym,
+  #                                  quarantine = quarantine,HH_trace = HH_trace,
+  #                                  contact_data=CD,p.urban = p.urban,
+  #                                  t=t,freq = freq,
+  #                                  pop=pop)
+  # 
+  # }
   
   
   res.week <- data.table(bind_rows(lapply(res,function(x) x$weekly_cases)))

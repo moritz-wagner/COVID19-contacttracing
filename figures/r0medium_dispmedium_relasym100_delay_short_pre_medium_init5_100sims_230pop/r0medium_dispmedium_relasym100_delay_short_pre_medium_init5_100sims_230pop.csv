@@ -1,0 +1,513 @@
+"","week","Intervention","measure","ymin","lower","middle","upper","ymax"
+"1",1,"Isolation (all symptomatic)","cumulative",2,3,5,6,11
+"2",1,"No Interventions","cumulative",2,3,4,5,8
+"3",1,"Quarantine HH + 25% non-HH","cumulative",2,3,5,6,9
+"4",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",1,3,4,5,8
+"5",1,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",2,3,5,6,8
+"6",1,"Tracing HH + 25% non-HH","cumulative",2,3,4,5,7
+"7",1,"Isolation (all symptomatic)","hh_cases",0,0,0,1,3
+"8",1,"No Interventions","hh_cases",0,0,0,1,2
+"9",1,"Quarantine HH + 25% non-HH","hh_cases",0,0,0,1,3
+"10",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,0,0,1,3
+"11",1,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",0,0,0,1,3
+"12",1,"Tracing HH + 25% non-HH","hh_cases",0,0,0,1,2
+"13",1,"Isolation (all symptomatic)","hh.con",0,0,0,31,109
+"14",1,"No Interventions","hh.con",0,0,5,26,92
+"15",1,"Quarantine HH + 25% non-HH","hh.con",0,0,2,29,79
+"16",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,0,0,14,76
+"17",1,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,0,0,23,77
+"18",1,"Tracing HH + 25% non-HH","hh.con",0,0,0,18,55
+"19",1,"Isolation (all symptomatic)","hh.con.orig",13,33,48,86,181
+"20",1,"No Interventions","hh.con.orig",11,27,44,76,159
+"21",1,"Quarantine HH + 25% non-HH","hh.con.orig",18,37,55,83,162
+"22",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",8,26,43,72,167
+"23",1,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",15,30,50,83,162
+"24",1,"Tracing HH + 25% non-HH","hh.con.orig",13,31,48,77,143
+"25",1,"Isolation (all symptomatic)","nhh.con",0,0,2,106,206
+"26",1,"No Interventions","nhh.con",0,0,28,105,251
+"27",1,"Quarantine HH + 25% non-HH","nhh.con",0,0,21,99,253
+"28",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,0,0,48,163
+"29",1,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",0,0,2,30,137
+"30",1,"Tracing HH + 25% non-HH","nhh.con",0,0,0,57,166
+"31",1,"Isolation (all symptomatic)","nhh.con.orig",20,78,147,240,433
+"32",1,"No Interventions","nhh.con.orig",32,74,140,228,506
+"33",1,"Quarantine HH + 25% non-HH","nhh.con.orig",44,98,174,279,450
+"34",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",8,50,82,140,317
+"35",1,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",15,30,59,111,228
+"36",1,"Tracing HH + 25% non-HH","nhh.con.orig",25,64,133,253,387
+"37",1,"Isolation (all symptomatic)","prop.hh",0,0,0,1,2
+"38",1,"No Interventions","prop.hh",0,0,0,0,1
+"39",1,"Quarantine HH + 25% non-HH","prop.hh",0,0,0,1,2
+"40",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,0,0,0,2
+"41",1,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",0,0,0,1,2
+"42",1,"Tracing HH + 25% non-HH","prop.hh",0,0,0,1,1
+"43",1,"Isolation (all symptomatic)","weekly_cases",2,3,5,6,11
+"44",1,"No Interventions","weekly_cases",2,3,4,5,8
+"45",1,"Quarantine HH + 25% non-HH","weekly_cases",2,3,5,6,9
+"46",1,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",1,3,4,5,8
+"47",1,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",2,3,5,6,8
+"48",1,"Tracing HH + 25% non-HH","weekly_cases",2,3,4,5,7
+"49",2,"Isolation (all symptomatic)","cumulative",3,9,16,30,53
+"50",2,"No Interventions","cumulative",4,8,13,26,44
+"51",2,"Quarantine HH + 25% non-HH","cumulative",3,9,15,25,42
+"52",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",4,8,12,20,37
+"53",2,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",4,8,12,22,38
+"54",2,"Tracing HH + 25% non-HH","cumulative",4,9,15,22,38
+"55",2,"Isolation (all symptomatic)","hh_cases",0,2,5,10,16
+"56",2,"No Interventions","hh_cases",1,2,4,8,13
+"57",2,"Quarantine HH + 25% non-HH","hh_cases",0,2,5,8,13
+"58",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,2,4,9,18
+"59",2,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",0,3,6,11,17
+"60",2,"Tracing HH + 25% non-HH","hh_cases",0,2,5,7,13
+"61",2,"Isolation (all symptomatic)","hh.con",0,0,18,66,233
+"62",2,"No Interventions","hh.con",0,0,22,64,234
+"63",2,"Quarantine HH + 25% non-HH","hh.con",0,0,19,64,182
+"64",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,0,14,40,161
+"65",2,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,0,5,28,105
+"66",2,"Tracing HH + 25% non-HH","hh.con",0,3,24,51,156
+"67",2,"Isolation (all symptomatic)","hh.con.orig",18,78,186,319,691
+"68",2,"No Interventions","hh.con.orig",21,60,132,289,568
+"69",2,"Quarantine HH + 25% non-HH","hh.con.orig",18,71,160,266,650
+"70",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",20,61,118,253,655
+"71",2,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",20,78,114,214,508
+"72",2,"Tracing HH + 25% non-HH","hh.con.orig",26,63,147,266,520
+"73",2,"Isolation (all symptomatic)","nhh.con",0,0,79,220,769
+"74",2,"No Interventions","nhh.con",0,3,98,266,989
+"75",2,"Quarantine HH + 25% non-HH","nhh.con",0,6,94,372,736
+"76",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,0,67,213,520
+"77",2,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",0,0,20,114,262
+"78",2,"Tracing HH + 25% non-HH","nhh.con",0,25,122,370,906
+"79",2,"Isolation (all symptomatic)","nhh.con.orig",52,226,463,891,1700
+"80",2,"No Interventions","nhh.con.orig",79,181,385,839,1679
+"81",2,"Quarantine HH + 25% non-HH","nhh.con.orig",55,235,484,824,1314
+"82",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",32,153,262,538,1103
+"83",2,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",22,92,138,242,488
+"84",2,"Tracing HH + 25% non-HH","nhh.con.orig",78,232,424,747,1258
+"85",2,"Isolation (all symptomatic)","prop.hh",0,1,2,3,5
+"86",2,"No Interventions","prop.hh",0,1,2,3,4
+"87",2,"Quarantine HH + 25% non-HH","prop.hh",0,1,2,3,4
+"88",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,1,2,4,5
+"89",2,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",0,2,3,4,6
+"90",2,"Tracing HH + 25% non-HH","prop.hh",0,1,2,3,4
+"91",2,"Isolation (all symptomatic)","weekly_cases",2,7,13,24,43
+"92",2,"No Interventions","weekly_cases",3,6,10,20,37
+"93",2,"Quarantine HH + 25% non-HH","weekly_cases",2,7,12,21,34
+"94",2,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",2,6,10,15,29
+"95",2,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",3,6,10,16,31
+"96",2,"Tracing HH + 25% non-HH","weekly_cases",3,7,12,18,35
+"97",3,"Isolation (all symptomatic)","cumulative",0,20,52,99,173
+"98",3,"No Interventions","cumulative",4,19,38,90,156
+"99",3,"Quarantine HH + 25% non-HH","cumulative",1,15,36,72,125
+"100",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",2,16,32,60,116
+"101",3,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",7,19,32,52,100
+"102",3,"Tracing HH + 25% non-HH","cumulative",4,18,44,78,150
+"103",3,"Isolation (all symptomatic)","hh_cases",0,5,14,26,40
+"104",3,"No Interventions","hh_cases",1,4,10,20,44
+"105",3,"Quarantine HH + 25% non-HH","hh_cases",0,4,9,18,35
+"106",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,5,11,19,46
+"107",3,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",2,7,12,20,39
+"108",3,"Tracing HH + 25% non-HH","hh_cases",0,4,11,19,40
+"109",3,"Isolation (all symptomatic)","hh.con",0,8,82,218,441
+"110",3,"No Interventions","hh.con",0,7,44,122,518
+"111",3,"Quarantine HH + 25% non-HH","hh.con",0,0,22,106,284
+"112",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,0,18,90,261
+"113",3,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,0,8,56,214
+"114",3,"Tracing HH + 25% non-HH","hh.con",0,11,43,147,343
+"115",3,"Isolation (all symptomatic)","hh.con.orig",0,190,513,1040,1887
+"116",3,"No Interventions","hh.con.orig",12,104,366,824,1759
+"117",3,"Quarantine HH + 25% non-HH","hh.con.orig",5,117,307,649,1294
+"118",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",8,114,290,605,1775
+"119",3,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",27,140,262,488,1138
+"120",3,"Tracing HH + 25% non-HH","hh.con.orig",25,145,408,746,1409
+"121",3,"Isolation (all symptomatic)","nhh.con",0,40,356,889,2335
+"122",3,"No Interventions","nhh.con",0,50,234,614,2168
+"123",3,"Quarantine HH + 25% non-HH","nhh.con",0,0,163,601,1418
+"124",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,8,157,524,1239
+"125",3,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",0,5,70,182,748
+"126",3,"Tracing HH + 25% non-HH","nhh.con",0,63,263,615,1761
+"127",3,"Isolation (all symptomatic)","nhh.con.orig",0,407,1361,2877,5076
+"128",3,"No Interventions","nhh.con.orig",41,458,980,2109,4674
+"129",3,"Quarantine HH + 25% non-HH","nhh.con.orig",5,358,930,1912,3210
+"130",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,260,760,1358,2794
+"131",3,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",52,174,334,645,1316
+"132",3,"Tracing HH + 25% non-HH","nhh.con.orig",112,436,1177,2182,3798
+"133",3,"Isolation (all symptomatic)","prop.hh",0,2,3,4,6
+"134",3,"No Interventions","prop.hh",1,2,3,4,5
+"135",3,"Quarantine HH + 25% non-HH","prop.hh",0,2,3,4,6
+"136",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,2,4,5,7
+"137",3,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",2,3,4,5,7
+"138",3,"Tracing HH + 25% non-HH","prop.hh",0,2,3,4,5
+"139",3,"Isolation (all symptomatic)","weekly_cases",0,12,36,66,126
+"140",3,"No Interventions","weekly_cases",2,11,27,61,115
+"141",3,"Quarantine HH + 25% non-HH","weekly_cases",1,11,22,49,88
+"142",3,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",1,9,21,43,85
+"143",3,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",3,12,20,34,72
+"144",3,"Tracing HH + 25% non-HH","weekly_cases",2,14,31,54,115
+"145",4,"Isolation (all symptomatic)","cumulative",0,42,153,284,513
+"146",4,"No Interventions","cumulative",14,52,98,279,497
+"147",4,"Quarantine HH + 25% non-HH","cumulative",0,32,83,184,320
+"148",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",0,36,78,144,317
+"149",4,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",9,39,72,132,257
+"150",4,"Tracing HH + 25% non-HH","cumulative",5,39,127,230,391
+"151",4,"Isolation (all symptomatic)","hh_cases",0,8,31,64,130
+"152",4,"No Interventions","hh_cases",3,11,25,57,117
+"153",4,"Quarantine HH + 25% non-HH","hh_cases",0,6,18,41,81
+"154",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,8,22,40,93
+"155",4,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",2,11,21,45,93
+"156",4,"Tracing HH + 25% non-HH","hh_cases",1,8,28,56,110
+"157",4,"Isolation (all symptomatic)","hh.con",0,23,181,472,1622
+"158",4,"No Interventions","hh.con",0,21,132,259,1258
+"159",4,"Quarantine HH + 25% non-HH","hh.con",0,8,70,247,687
+"160",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,7,58,200,582
+"161",4,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,9,33,152,397
+"162",4,"Tracing HH + 25% non-HH","hh.con",0,23,142,448,1009
+"163",4,"Isolation (all symptomatic)","hh.con.orig",0,374,1436,2448,5422
+"164",4,"No Interventions","hh.con.orig",66,410,892,2261,5163
+"165",4,"Quarantine HH + 25% non-HH","hh.con.orig",0,153,651,1532,3006
+"166",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",0,194,688,1545,3088
+"167",4,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",33,256,606,1306,2880
+"168",4,"Tracing HH + 25% non-HH","hh.con.orig",21,324,1160,2032,4250
+"169",4,"Isolation (all symptomatic)","nhh.con",0,133,680,2368,7694
+"170",4,"No Interventions","nhh.con",0,181,610,1384,5955
+"171",4,"Quarantine HH + 25% non-HH","nhh.con",0,78,368,900,2929
+"172",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,64,273,1085,2562
+"173",4,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",0,27,126,480,1146
+"174",4,"Tracing HH + 25% non-HH","nhh.con",0,98,634,1788,4512
+"175",4,"Isolation (all symptomatic)","nhh.con.orig",0,938,3460,7269,13509
+"176",4,"No Interventions","nhh.con.orig",162,1285,2402,6487,13100
+"177",4,"Quarantine HH + 25% non-HH","nhh.con.orig",0,412,1650,4470,8186
+"178",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,526,1617,3020,5709
+"179",4,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",26,328,684,1389,3022
+"180",4,"Tracing HH + 25% non-HH","nhh.con.orig",67,806,3074,5966,10460
+"181",4,"Isolation (all symptomatic)","prop.hh",0,3,4,5,6
+"182",4,"No Interventions","prop.hh",1,3,4,5,6
+"183",4,"Quarantine HH + 25% non-HH","prop.hh",0,2,3,4,6
+"184",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,2,4,5,7
+"185",4,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",1,4,5,6,7
+"186",4,"Tracing HH + 25% non-HH","prop.hh",1,2,3,5,6
+"187",4,"Isolation (all symptomatic)","weekly_cases",0,25,104,185,339
+"188",4,"No Interventions","weekly_cases",7,33,64,174,333
+"189",4,"Quarantine HH + 25% non-HH","weekly_cases",0,12,44,115,208
+"190",4,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",0,18,48,88,185
+"191",4,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",2,21,39,82,162
+"192",4,"Tracing HH + 25% non-HH","weekly_cases",3,22,78,156,251
+"193",5,"Isolation (all symptomatic)","cumulative",0,88,404,748,1411
+"194",5,"No Interventions","cumulative",29,146,280,738,1460
+"195",5,"Quarantine HH + 25% non-HH","cumulative",0,44,159,441,798
+"196",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",0,73,196,332,747
+"197",5,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",15,85,166,313,607
+"198",5,"Tracing HH + 25% non-HH","cumulative",10,105,292,600,1114
+"199",5,"Isolation (all symptomatic)","hh_cases",0,19,89,171,346
+"200",5,"No Interventions","hh_cases",7,33,66,159,344
+"201",5,"Quarantine HH + 25% non-HH","hh_cases",0,8,29,92,172
+"202",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,15,52,94,216
+"203",5,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",3,24,50,98,199
+"204",5,"Tracing HH + 25% non-HH","hh_cases",2,21,68,150,255
+"205",5,"Isolation (all symptomatic)","hh.con",0,72,496,1027,3307
+"206",5,"No Interventions","hh.con",0,92,347,887,3417
+"207",5,"Quarantine HH + 25% non-HH","hh.con",0,14,128,518,1697
+"208",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,29,181,504,1115
+"209",5,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,32,122,302,766
+"210",5,"Tracing HH + 25% non-HH","hh.con",0,49,350,948,2245
+"211",5,"Isolation (all symptomatic)","hh.con.orig",0,985,3586,6820,13754
+"212",5,"No Interventions","hh.con.orig",141,1121,2555,6011,14127
+"213",5,"Quarantine HH + 25% non-HH","hh.con.orig",0,190,1052,3786,7035
+"214",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",0,654,1651,3284,7189
+"215",5,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",66,652,1596,2929,5955
+"216",5,"Tracing HH + 25% non-HH","hh.con.orig",28,877,2638,6142,10333
+"217",5,"Isolation (all symptomatic)","nhh.con",0,296,2184,5224,15441
+"218",5,"No Interventions","nhh.con",0,707,1878,3951,16591
+"219",5,"Quarantine HH + 25% non-HH","nhh.con",0,136,618,2267,6248
+"220",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,172,936,2451,6435
+"221",5,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",0,102,394,942,2060
+"222",5,"Tracing HH + 25% non-HH","nhh.con",0,252,1426,4286,10459
+"223",5,"Isolation (all symptomatic)","nhh.con.orig",0,1996,9362,17989,37781
+"224",5,"No Interventions","nhh.con.orig",425,3524,6690,16674,37474
+"225",5,"Quarantine HH + 25% non-HH","nhh.con.orig",0,799,3004,9148,18002
+"226",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,1140,3952,6611,16443
+"227",5,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",62,790,1768,3402,6207
+"228",5,"Tracing HH + 25% non-HH","nhh.con.orig",70,2644,7236,14324,26169
+"229",5,"Isolation (all symptomatic)","prop.hh",0,3,5,5,6
+"230",5,"No Interventions","prop.hh",1,4,4,5,7
+"231",5,"Quarantine HH + 25% non-HH","prop.hh",0,2,4,5,6
+"232",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,4,5,6,7
+"233",5,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",2,4,6,7,8
+"234",5,"Tracing HH + 25% non-HH","prop.hh",1,3,4,5,6
+"235",5,"Isolation (all symptomatic)","weekly_cases",0,57,231,479,926
+"236",5,"No Interventions","weekly_cases",15,89,173,453,960
+"237",5,"Quarantine HH + 25% non-HH","weekly_cases",0,20,71,246,483
+"238",5,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",0,37,113,192,468
+"239",5,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",6,44,96,189,366
+"240",5,"Tracing HH + 25% non-HH","weekly_cases",4,64,186,383,675
+"241",6,"Isolation (all symptomatic)","cumulative",0,250,1072,2002,4007
+"242",6,"No Interventions","cumulative",93,392,776,2080,4147
+"243",6,"Quarantine HH + 25% non-HH","cumulative",0,75,337,920,1934
+"244",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",0,168,468,806,1859
+"245",6,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",17,185,390,723,1445
+"246",6,"Tracing HH + 25% non-HH","cumulative",14,285,802,1612,2866
+"247",6,"Isolation (all symptomatic)","hh_cases",0,58,222,478,931
+"248",6,"No Interventions","hh_cases",20,95,182,464,979
+"249",6,"Quarantine HH + 25% non-HH","hh_cases",0,11,62,185,417
+"250",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,41,112,218,467
+"251",6,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",3,53,116,225,449
+"252",6,"Tracing HH + 25% non-HH","hh_cases",2,63,188,382,694
+"253",6,"Isolation (all symptomatic)","hh.con",0,254,1274,2812,7596
+"254",6,"No Interventions","hh.con",0,390,1074,2406,8955
+"255",6,"Quarantine HH + 25% non-HH","hh.con",0,41,285,1064,2727
+"256",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,123,442,902,2581
+"257",6,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,96,311,542,1702
+"258",6,"Tracing HH + 25% non-HH","hh.con",0,281,983,2270,5756
+"259",6,"Isolation (all symptomatic)","hh.con.orig",0,2075,8772,19057,37221
+"260",6,"No Interventions","hh.con.orig",611,3876,7153,17033,36856
+"261",6,"Quarantine HH + 25% non-HH","hh.con.orig",0,386,2277,7302,16862
+"262",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",0,1358,3819,6995,15699
+"263",6,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",55,1341,3795,6621,13822
+"264",6,"Tracing HH + 25% non-HH","hh.con.orig",42,2319,7024,14519,28929
+"265",6,"Isolation (all symptomatic)","nhh.con",0,979,6032,13063,38014
+"266",6,"No Interventions","nhh.con",49,1699,5654,11416,46447
+"267",6,"Quarantine HH + 25% non-HH","nhh.con",0,110,1372,5215,13098
+"268",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,633,2470,5270,12708
+"269",6,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",5,290,882,1778,5577
+"270",6,"Tracing HH + 25% non-HH","nhh.con",0,1171,4816,11525,25296
+"271",6,"Isolation (all symptomatic)","nhh.con.orig",0,5996,24158,47582,97375
+"272",6,"No Interventions","nhh.con.orig",2195,10200,19092,53960,96753
+"273",6,"Quarantine HH + 25% non-HH","nhh.con.orig",0,1008,5883,20584,45721
+"274",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,2700,8553,15123,34132
+"275",6,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",60,1716,3420,7611,15753
+"276",6,"Tracing HH + 25% non-HH","nhh.con.orig",114,7010,19478,39638,72930
+"277",6,"Isolation (all symptomatic)","prop.hh",0,4,5,5,6
+"278",6,"No Interventions","prop.hh",2,4,5,5,6
+"279",6,"Quarantine HH + 25% non-HH","prop.hh",0,2,5,5,7
+"280",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,5,6,7,7
+"281",6,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",2,5,6,7,8
+"282",6,"Tracing HH + 25% non-HH","prop.hh",1,4,5,5,6
+"283",6,"Isolation (all symptomatic)","weekly_cases",0,158,595,1311,2608
+"284",6,"No Interventions","weekly_cases",59,266,508,1329,2586
+"285",6,"Quarantine HH + 25% non-HH","weekly_cases",0,26,154,484,1173
+"286",6,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",0,90,257,452,1031
+"287",6,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",7,103,224,424,804
+"288",6,"Tracing HH + 25% non-HH","weekly_cases",4,172,505,1009,1859
+"289",7,"Isolation (all symptomatic)","cumulative",0,694,2614,5292,10737
+"290",7,"No Interventions","cumulative",222,1129,2195,5818,11077
+"291",7,"Quarantine HH + 25% non-HH","cumulative",0,115,636,1738,4479
+"292",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",0,369,1038,1819,4167
+"293",7,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",34,406,862,1620,3219
+"294",7,"Tracing HH + 25% non-HH","cumulative",14,694,2110,4404,7752
+"295",7,"Isolation (all symptomatic)","hh_cases",0,159,575,1177,2487
+"296",7,"No Interventions","hh_cases",44,253,502,1364,2526
+"297",7,"Quarantine HH + 25% non-HH","hh_cases",0,16,130,327,932
+"298",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,96,274,504,1145
+"299",7,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",6,130,272,488,955
+"300",7,"Tracing HH + 25% non-HH","hh_cases",1,150,466,970,1807
+"301",7,"Isolation (all symptomatic)","hh.con",0,836,3276,8970,18112
+"302",7,"No Interventions","hh.con",10,1116,3498,8327,25942
+"303",7,"Quarantine HH + 25% non-HH","hh.con",0,85,796,2468,5039
+"304",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,613,1148,2500,5038
+"305",7,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,181,681,1416,2715
+"306",7,"Tracing HH + 25% non-HH","hh.con",0,692,2704,6956,13149
+"307",7,"Isolation (all symptomatic)","hh.con.orig",0,6042,22644,48716,96614
+"308",7,"No Interventions","hh.con.orig",1682,10247,19889,50793,95687
+"309",7,"Quarantine HH + 25% non-HH","hh.con.orig",0,598,4786,11946,34430
+"310",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",0,2862,9464,16347,38857
+"311",7,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",77,2947,8062,13696,28360
+"312",7,"Tracing HH + 25% non-HH","hh.con.orig",56,5740,18356,37837,70605
+"313",7,"Isolation (all symptomatic)","nhh.con",0,3622,14928,42287,85309
+"314",7,"No Interventions","nhh.con",25,4765,16308,38250,129707
+"315",7,"Quarantine HH + 25% non-HH","nhh.con",0,206,3210,11626,24822
+"316",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,2794,5671,12104,24983
+"317",7,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",10,573,2018,4453,9100
+"318",7,"Tracing HH + 25% non-HH","nhh.con",29,3235,13265,33828,57924
+"319",7,"Isolation (all symptomatic)","nhh.con.orig",0,16446,62043,129421,262302
+"320",7,"No Interventions","nhh.con.orig",4955,27780,56093,141726,266747
+"321",7,"Quarantine HH + 25% non-HH","nhh.con.orig",0,1917,12142,33582,94696
+"322",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,6346,19310,35461,85108
+"323",7,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",108,3940,9084,15825,31745
+"324",7,"Tracing HH + 25% non-HH","nhh.con.orig",195,15516,51652,104675,188492
+"325",7,"Isolation (all symptomatic)","prop.hh",0,4,5,5,6
+"326",7,"No Interventions","prop.hh",2,4,5,5,6
+"327",7,"Quarantine HH + 25% non-HH","prop.hh",0,3,5,5,6
+"328",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,6,6,7,7
+"329",7,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",3,6,6,7,8
+"330",7,"Tracing HH + 25% non-HH","prop.hh",1,4,5,5,6
+"331",7,"Isolation (all symptomatic)","weekly_cases",0,448,1570,3294,6813
+"332",7,"No Interventions","weekly_cases",130,722,1410,3733,6930
+"333",7,"Quarantine HH + 25% non-HH","weekly_cases",0,46,328,861,2471
+"334",7,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",0,184,591,1052,2505
+"335",7,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",8,218,482,920,1778
+"336",7,"Tracing HH + 25% non-HH","weekly_cases",3,410,1342,2678,4818
+"337",8,"Isolation (all symptomatic)","cumulative",0,1390,5131,10227,21173
+"338",8,"No Interventions","cumulative",424,2325,4392,11776,21489
+"339",8,"Quarantine HH + 25% non-HH","cumulative",0,175,1050,2796,7835
+"340",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","cumulative",0,624,1838,3254,7491
+"341",8,"Physical Distancing
+(Max 5 non-HH contacts)","cumulative",45,707,1521,2878,5685
+"342",8,"Tracing HH + 25% non-HH","cumulative",3,1362,4163,8512,15010
+"343",8,"Isolation (all symptomatic)","hh_cases",0,240,899,1866,3663
+"344",8,"No Interventions","hh_cases",79,406,812,2140,3864
+"345",8,"Quarantine HH + 25% non-HH","hh_cases",0,17,175,373,1280
+"346",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh_cases",0,118,384,647,1570
+"347",8,"Physical Distancing
+(Max 5 non-HH contacts)","hh_cases",7,170,358,681,1353
+"348",8,"Tracing HH + 25% non-HH","hh_cases",0,243,708,1468,2715
+"349",8,"Isolation (all symptomatic)","hh.con",0,1150,5255,13539,25349
+"350",8,"No Interventions","hh.con",14,1668,5662,15028,38133
+"351",8,"Quarantine HH + 25% non-HH","hh.con",0,89,786,2341,7564
+"352",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con",0,661,1618,3391,8540
+"353",8,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con",0,382,896,2057,4237
+"354",8,"Tracing HH + 25% non-HH","hh.con",7,1010,4359,9856,23256
+"355",8,"Isolation (all symptomatic)","hh.con.orig",0,9898,35192,70923,145732
+"356",8,"No Interventions","hh.con.orig",3117,16475,31969,79410,144159
+"357",8,"Quarantine HH + 25% non-HH","hh.con.orig",0,728,6059,14204,45880
+"358",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","hh.con.orig",0,3640,13180,22580,52004
+"359",8,"Physical Distancing
+(Max 5 non-HH contacts)","hh.con.orig",142,4268,11127,19936,38042
+"360",8,"Tracing HH + 25% non-HH","hh.con.orig",34,8967,26960,57350,107082
+"361",8,"Isolation (all symptomatic)","nhh.con",0,5235,25575,65457,119436
+"362",8,"No Interventions","nhh.con",150,7552,25659,63198,185188
+"363",8,"Quarantine HH + 25% non-HH","nhh.con",0,322,3912,11070,37157
+"364",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con",0,3244,9002,17571,44409
+"365",8,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con",33,1388,2919,6718,14863
+"366",8,"Tracing HH + 25% non-HH","nhh.con",27,3956,19978,45178,120684
+"367",8,"Isolation (all symptomatic)","nhh.con.orig",0,26417,96570,196035,391310
+"368",8,"No Interventions","nhh.con.orig",7820,46756,85755,233940,409638
+"369",8,"Quarantine HH + 25% non-HH","nhh.con.orig",0,2246,15608,36035,134185
+"370",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","nhh.con.orig",0,8148,27802,44858,107215
+"371",8,"Physical Distancing
+(Max 5 non-HH contacts)","nhh.con.orig",196,5125,11818,21986,41740
+"372",8,"Tracing HH + 25% non-HH","nhh.con.orig",114,24954,75764,157280,283952
+"373",8,"Isolation (all symptomatic)","prop.hh",0,4,5,5,5
+"374",8,"No Interventions","prop.hh",3,4,5,5,5
+"375",8,"Quarantine HH + 25% non-HH","prop.hh",0,3,4,5,6
+"376",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","prop.hh",0,6,6,7,7
+"377",8,"Physical Distancing
+(Max 5 non-HH contacts)","prop.hh",3,6,7,7,7
+"378",8,"Tracing HH + 25% non-HH","prop.hh",0,4,5,5,6
+"379",8,"Isolation (all symptomatic)","weekly_cases",0,687,2496,5140,10122
+"380",8,"No Interventions","weekly_cases",201,1192,2224,5910,10495
+"381",8,"Quarantine HH + 25% non-HH","weekly_cases",0,51,430,961,3371
+"382",8,"School closures
+(0 non-HH contacts for 6-19 year olds)","weekly_cases",0,263,828,1327,3328
+"383",8,"Physical Distancing
+(Max 5 non-HH contacts)","weekly_cases",16,293,670,1225,2381
+"384",8,"Tracing HH + 25% non-HH","weekly_cases",2,648,1939,4060,7410

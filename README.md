@@ -2,11 +2,13 @@
 
 Source code accompanying Wagner et al. "Using contact data to model the impact of contact tracing and physical distancing to control the SARS-CoV-2 outbreak in Kenya".
 
-The relevant code to rerun the analyses can be found under [R](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/R)
+## Main files
 
-The contact data from [Kiti et al.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104786) can be found under [data](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/data)
-
-The Supplementary Appendix accompanying the publication can be found under [submission/Supplementary Appendix.pdf](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/submission/Supplementary%20Appendix.pdf)
+* The relevant code to rerun the analyses can be found in the [R folder](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/R)
+	* To run different simulations of the model, open COVID19-contacttracing.Rproj as a project in Rstudio and use [R/run_sims.R](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/R/run_sims.R)
+	* To plot different simulations of the model that have been run, open COVID19-contacttracing.Rproj as a project in Rstudio and use [R/plotting.R](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/R/plotting.R)
+* The contact data from [Kiti et al.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104786) can be found in the [data folder](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/data)
+* The Supplementary Appendix accompanying the publication can be found under [submission/Supplementary Appendix.pdf](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/submission/Supplementary%20Appendix.pdf)
 
 
 ## Abstract

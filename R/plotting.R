@@ -8,9 +8,9 @@ require(ggsci)
 cap_weeks <- 8
 sims <- 100
 r0.lev <- "medium"
-disp <- "medium"
-iso_delay <- "short"
-pre_symp <- "medium"
+disp <- "high"
+iso_delay <- "short2"
+pre_symp <- "high"
 rel.inf.asym <- 1
 pop <- 230*1000
 

@@ -1,6 +1,7 @@
 # Using contact data to model the impact of contact tracing and physical distancing to control the SARS-CoV-2 outbreak in Kenya
 
 Source code accompanying Wagner et al. "Using contact data to model the impact of contact tracing and physical distancing to control the SARS-CoV-2 outbreak in Kenya".
+[https://doi.org/10.12688/wellcomeopenres.16264.1](https://doi.org/10.12688/wellcomeopenres.16264.1)
 
 ## Main files
 

@@ -8,6 +8,7 @@ Source code accompanying Wagner et al. "Using contact data to model the impact o
 * The relevant code to rerun the analyses can be found in the [R folder](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/R)
 	* To run different simulations of the model, open COVID19-contacttracing.Rproj as a project in Rstudio and use [R/run_sims.R](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/R/run_sims.R)
 	* To plot different simulations of the model that have been run, open COVID19-contacttracing.Rproj as a project in Rstudio and use [R/plotting.R](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/R/plotting.R)
+	* The underlying branching process model was heavily based on the work done by [Hellewell et al.](https://www.thelancet.com/article/S2214-109X(20)30074-7/fulltext) and their [code](https://github.com/cmmid/ringbp)
 * The contact data from [Kiti et al.](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0104786) can be found in the [data folder](https://github.com/moritz-wagner/COVID19-contacttracing/tree/master/data)
 * The Supplementary Appendix accompanying the publication can be found under [submission/Supplementary Appendix.pdf](https://github.com/moritz-wagner/COVID19-contacttracing/blob/master/submission/Supplementary%20Appendix.pdf)
 
